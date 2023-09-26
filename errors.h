@@ -29,6 +29,8 @@ enum class ERRORS
 
     /// invalid stack error
     INVALID_STACK,
+    /// popping element from empty stack
+    EMPTY_STACK,
 
     /// unknown error
     UNKNOWN

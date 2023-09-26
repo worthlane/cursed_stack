@@ -7,6 +7,8 @@
 #include "types.h"
 #include "hash.h"
 
+static inline bool EmptyStackCheck(Stack_t* stk);
+
 static void InitCanary(canary_t* prefix_canary, canary_t* postfix_canary);
 static bool VerifyCanary(const canary_t* prefix_canary, const canary_t* postfix_canary);
 
@@ -46,6 +48,7 @@ int StackCtor(Stack_t* stk, size_t capacity)
     stk->data     = first_elem;
     stk->size     = 0;
     stk->capacity = capacity;
+    stk->reserved = capacity;
 
     ON_HASH
     (
@@ -160,6 +163,8 @@ int StackRealloc(Stack_t* stk, size_t new_capacity)
 
     stk->data     = first_elem;
     stk->capacity = new_capacity;
+    if (new_capacity < stk->reserved)
+        stk->reserved = new_capacity;
 
     ReInitAllHashes(stk);
 
@@ -175,7 +180,8 @@ int StackPop(Stack_t* stk, elem_t* ret_value)
     assert(stk);
     assert(stk->data);
 
-    CHECK_STACK(stk, Global_stack_error);
+    if (EmptyStackCheck(stk))
+        return (int) ERRORS::EMPTY_STACK;
 
     *(ret_value) = (stk->data)[--(stk->size)];
     (stk->data)[(stk->size)] = 0;
@@ -306,7 +312,7 @@ hash_t ReInitDataHash(const Stack_t* stk)
     ON_HASH
     (
         elem_t* data = stk->data;
-        size_t data_size = stk->capacity * sizeof(elem_t);
+        size_t data_size = stk->reserved * sizeof(elem_t);
 
         ON_CANARY
         (
@@ -404,4 +410,14 @@ static inline void ReInitAllHashes(Stack_t* stk)
         stk->data_hash  = ReInitDataHash(stk);
         stk->stack_hash = ReInitStackHash(stk)
     );
+}
+
+//-----------------------------------------------------------------------------------------------------
+
+static inline bool EmptyStackCheck(Stack_t* stk)
+{
+    if (stk->size == 0)
+        return true;
+
+    return false;
 }

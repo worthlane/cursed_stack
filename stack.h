@@ -57,30 +57,23 @@ struct Stack
 {
     ON_CANARY
     (
-        /// prefix stack canary (canary protection mode)
         canary_t stack_prefix;
     )
 
-    /// stack data
     elem_t* data;
-    /// stack size
     size_t size;
-    /// stack capacity
     size_t capacity;
+    size_t reserved;
 
     ON_HASH
     (
-        /// hash function (hash protection mode)
         hash_f hash_func;
-        /// data expected hash (hash protection mode)
         hash_t data_hash;
-        /// stack expected hash (hash protection mode)
         hash_t stack_hash;
     )
 
     ON_CANARY
     (
-        /// postfix stack canary (canary protection mode)
         canary_t stack_postfix;
     )
 };
