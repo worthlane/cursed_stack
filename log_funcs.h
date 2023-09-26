@@ -64,18 +64,22 @@ int PrintStackData(FILE* fp, const Stack_t* stk);
                                                     "RUNNING FUNCTION %s FROM FILE \"%s\"(%d)\n",           \
                                                     func, file, line)
 
-#define CHECK_STACK(stk, stack_error)           stack_error = StackOk(stk);                                 \
-                                                if (Global_stack_error != OK)                                      \
-                                                {                                                           \
-                                                    STACK_DUMP(stk);                                        \
-                                                    PrintStackCondition(__LOG_STREAM__, Global_stack_error, stk);  \
-                                                    PrintSeparator(__LOG_STREAM__);                         \
-                                                    return (int) ERRORS::INVALID_STACK;                     \
+#define CHECK_STACK(stk, stack_error)           stack_error = StackOk(stk);                         \
+                                                if (Global_stack_error != OK)                       \
+                                                {                                                   \
+                                                    STACK_DUMP(stk);                                \
+                                                    PrintStackCondition(__LOG_STREAM__,             \
+                                                                        Global_stack_error, stk);   \
+                                                    PrintSeparator(__LOG_STREAM__);                 \
+                                                    return (int) ERRORS::INVALID_STACK;             \
                                                 }
 
 
-#define LOG_ERROR(error)                        return PrintError(__LOG_STREAM__, error, __func__, \
-                                                                  __FILE__, __LINE__)
+#define EXIT_ERROR(error)                       if (error->code != ERRORS::NONE)                       \
+                                                {                                                      \
+                                                    return PrintError(__LOG_STREAM__, error, __func__, \
+                                                                      __FILE__, __LINE__);             \
+                                                }
 
 
 
