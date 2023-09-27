@@ -79,7 +79,7 @@ enum StackCondition
  * @param[in] line line where error happened
  * @return int error code
  ************************************************************/
-int PrintError(FILE* fp, struct ErrorInfo* error, const char* func, const char* file, const int line);
+int PrintError(FILE* fp, void* error, const char* func, const char* file, const int line);
 
 /************************************************************//**
  * @brief Prints stack condition

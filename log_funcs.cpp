@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <assert.h>
+#include <stdarg.h>
 #include <strings.h>
 
 #include "log_funcs.h"
@@ -80,11 +81,25 @@ int PrintStackData(FILE* fp, const Stack_t* stk)
 
 //-----------------------------------------------------------------------------------------------------
 
-int LogDump(dump_f dump_func, const Stack_t* stk, const char* func, const char* file, const int line)
+int LogDump(dump_f dump_func, void* stk, const char* func, const char* file, const int line)
 {
     assert(dump_func);
     assert(stk);
 
     return dump_func(__LOG_STREAM__, stk, func, file, line);
+}
+
+//-----------------------------------------------------------------------------------------------------
+
+int PrintLog (const char *format, ...)
+{
+  va_list arg;
+  int done;
+
+  va_start (arg, format);
+  done = vfprintf (__LOG_STREAM__, format, arg);
+  va_end (arg);
+
+  return done;
 }
 

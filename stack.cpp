@@ -352,11 +352,13 @@ hash_t GetStackHash(const Stack_t* stk)
 
 //-----------------------------------------------------------------------------------------------------
 
-int StackDump(FILE* fp, const Stack_t* stk, const char* func, const char* file, const int line)
+int StackDump(FILE* fp, void* stack, const char* func, const char* file, const int line)
 {
-    assert(stk);
+    assert(stack);
     assert(func);
     assert(file);
+
+    const Stack_t* stk = (const Stack_t*) stack;
 
     LOG_START_MOD(func, file, line);
 

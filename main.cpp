@@ -36,8 +36,10 @@ int main(const int argc, const char* argv[])
     StackPop(&stk, &a);
     StackPop(&stk, &a);
     StackPop(&stk, &a);
-    StackPop(&stk, &a);
-    StackPop(&stk, &a);
+    error.code = (ERRORS) StackPop(&stk, &a);
+    stk.data[1] = 228;
+    error.code = (ERRORS) StackPop(&stk, &a);
+    EXIT_IF_ERROR(error_ptr);
 
     STACK_DUMP(&stk);
 }

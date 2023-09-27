@@ -139,7 +139,7 @@ int StackPop(Stack_t* stk, elem_t* ret_value);
  * @param[in] line line, where print caled
  * @return int error code
  ************************************************************/
-int StackDump(FILE* fp, const Stack_t* stk, const char* func, const char* file, const int line);
+int StackDump(FILE* fp, void* stk, const char* func, const char* file, const int line);
 
 /************************************************************//**
  * @brief Verifies stack

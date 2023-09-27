@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <assert.h>
 
 #include "errors.h"
 #include "mylib/colorlib.h"
@@ -6,9 +7,13 @@
 #include "stack.h"
 #include "types.h"
 
-int PrintError(FILE* fp, struct ErrorInfo* error, const char* func, const char* file, const int line)
+int PrintError(FILE* fp, void* err, const char* func, const char* file, const int line)
 {
+    assert(err);
+    
     LOG_START_MOD(func, file, line);
+
+    struct ErrorInfo* error = (struct ErrorInfo*) err;
 
     switch (error->code)
     {
