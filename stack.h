@@ -57,23 +57,32 @@ struct Stack
 {
     ON_CANARY
     (
+        /// stack prefix canary
         canary_t stack_prefix;
     )
 
+    /// stack data
     elem_t* data;
+    /// stack size
     size_t size;
+    /// stack capacity
     size_t capacity;
+    /// reserved capacity (if program can't allocate memory)
     size_t reserved;
 
     ON_HASH
     (
+        /// hash function
         hash_f hash_func;
+        /// data hash
         hash_t data_hash;
+        /// stack hash
         hash_t stack_hash;
     )
 
     ON_CANARY
     (
+        /// stack postfix canary
         canary_t stack_postfix;
     )
 };
@@ -158,6 +167,10 @@ hash_t GetDataHash(const Stack_t* stk);
  ************************************************************/
 hash_t GetStackHash(const Stack_t* stk);
 
+#ifdef CHECK_STACK
+#define CHECK_STACK
+
+#endif
 #define CHECK_STACK(stk, stack_error)           stack_error = StackOk(stk);                         \
                                                 if (Global_stack_error != OK)                       \
                                                 {                                                   \

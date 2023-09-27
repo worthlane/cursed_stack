@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.7"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Cursed stack: /Users/amigo/Documents/GitHub/cursed_stack/types.h Source File</title>
+<title>Cursed stack: types.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -69,7 +69,7 @@ $(function() {
 </div>
 
 <div class="header">
-  <div class="headertitle"><div class="title">/Users/amigo/Documents/GitHub/cursed_stack/types.h</div></div>
+  <div class="headertitle"><div class="title">types.h</div></div>
 </div><!--header-->
 <div class="contents">
 <a href="types_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span> </div>
@@ -77,11 +77,12 @@ $(function() {
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno"><a class="line" href="types_8h.html#ad97ac19c6b853e671de0fe08345ff88b">    8</a></span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="struct_stack.html">Stack</a> <a class="code hl_struct" href="struct_stack.html">Stack_t</a>;</div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno"><a class="line" href="types_8h.html#afb05a131363b0de134535fc5f7b01dc0">   11</a></span><span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code hl_typedef" href="types_8h.html#afb05a131363b0de134535fc5f7b01dc0">hash_t</a>;</div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno"><a class="line" href="types_8h.html#a9c4114bbb30080effd2dd3fa2b82fcff">   13</a></span><span class="keyword">typedef</span> <a class="code hl_typedef" href="types_8h.html#afb05a131363b0de134535fc5f7b01dc0">hash_t</a> (*<a class="code hl_typedef" href="types_8h.html#a9c4114bbb30080effd2dd3fa2b82fcff">hash_f</a>) (<span class="keyword">const</span> <span class="keywordtype">void</span>* obj, <span class="keywordtype">size_t</span> size);</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno"><a class="line" href="types_8h.html#a9c4114bbb30080effd2dd3fa2b82fcff">   13</a></span><span class="keyword">typedef</span> <a class="code hl_typedef" href="types_8h.html#afb05a131363b0de134535fc5f7b01dc0">hash_t</a> (*<a class="code hl_typedef" href="types_8h.html#a9c4114bbb30080effd2dd3fa2b82fcff">hash_f</a>) (<span class="keyword">const</span> <span class="keywordtype">void</span>* obj, <span class="keywordtype">size_t</span> <a class="code hl_variable" href="struct_stack.html#a3a469595caaaf49bbce059efabbe07b5">size</a>);</div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="types_8h.html#afea1fbe48beaf2a0ce692779f6f91a3d">   15</a></span><span class="keyword">typedef</span> <span class="keywordtype">long</span> <span class="keywordtype">long</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code hl_typedef" href="types_8h.html#afea1fbe48beaf2a0ce692779f6f91a3d">canary_t</a>;</div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#define PRINT_ELEM_T &quot;%lld&quot;</span></div>
 <div class="ttc" id="astruct_stack_html"><div class="ttname"><a href="struct_stack.html">Stack</a></div><div class="ttdoc">canary value</div><div class="ttdef"><b>Definition</b> stack.h:57</div></div>
+<div class="ttc" id="astruct_stack_html_a3a469595caaaf49bbce059efabbe07b5"><div class="ttname"><a href="struct_stack.html#a3a469595caaaf49bbce059efabbe07b5">Stack::size</a></div><div class="ttdeci">size_t size</div><div class="ttdoc">stack size</div><div class="ttdef"><b>Definition</b> stack.h:67</div></div>
 <div class="ttc" id="atypes_8h_html_a90421bf48c920c2e623458ba1e134a2a"><div class="ttname"><a href="types_8h.html#a90421bf48c920c2e623458ba1e134a2a">elem_t</a></div><div class="ttdeci">long long int elem_t</div><div class="ttdoc">stack element type</div><div class="ttdef"><b>Definition</b> types.h:6</div></div>
 <div class="ttc" id="atypes_8h_html_a9c4114bbb30080effd2dd3fa2b82fcff"><div class="ttname"><a href="types_8h.html#a9c4114bbb30080effd2dd3fa2b82fcff">hash_f</a></div><div class="ttdeci">hash_t(* hash_f)(const void *obj, size_t size)</div><div class="ttdoc">hash function type</div><div class="ttdef"><b>Definition</b> types.h:13</div></div>
 <div class="ttc" id="atypes_8h_html_afb05a131363b0de134535fc5f7b01dc0"><div class="ttname"><a href="types_8h.html#afb05a131363b0de134535fc5f7b01dc0">hash_t</a></div><div class="ttdeci">unsigned int hash_t</div><div class="ttdoc">hash type</div><div class="ttdef"><b>Definition</b> types.h:11</div></div>

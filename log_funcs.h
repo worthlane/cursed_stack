@@ -41,27 +41,55 @@ void PrintSeparator(FILE* fp);
  ************************************************************/
 int PrintStackData(FILE* fp, const Stack_t* stk);
 
+#ifdef LOG_PRINT
+#undef LOG_PRINT
+
+#endif
 #define LOG_PRINT(...)      fprintf(__LOG_STREAM__, __VA_ARGS__)
 
+#ifdef LOG_START
+#undef LOG_START
+
+#endif
 #define LOG_START()         fprintf(__LOG_STREAM__,                                         \
                                     "--------------------------------------------------\n"  \
                                     "RUNNING FUNCTION %s FROM FILE \"%s\"(%d)\n",           \
                                     __func__, __FILE__, __LINE__)
 
+#ifdef LOG_END
+#undef LOG_END
+
+#endif
 #define LOG_END()           fprintf(__LOG_STREAM__,                                         \
                                     "END TIME: %s\n"                                        \
                                     "--------------------------------------------------\n", \
                                     __TIME__)
 
+#ifdef STACK_DUMP
+#undef STACK_DUMP
+
+#endif
 #define STACK_DUMP(stk)                     StackDump(__LOG_STREAM__, stk, __func__, __FILE__, __LINE__)
 
+#ifdef LOG_SEPARATOR
+#undef LOG_SEPARATOR
+
+#endif
 #define LOG_SEPARATOR()                     PrintSeparator(__LOG_STREAM__)
 
+#ifdef LOG_START_MOD
+#undef LOG_START_MOD
+
+#endif
 #define LOG_START_MOD(func, file, line)     fprintf(__LOG_STREAM__,                                         \
                                                     "--------------------LOG CALLED--------------------\n"  \
                                                     "RUNNING FUNCTION %s FROM FILE \"%s\"(%d)\n",           \
                                                     func, file, line)
 
+#ifdef EXIT_IF_ERROR
+#undef EXIT_IF_ERROR
+
+#endif
 #define EXIT_IF_ERROR(error)                if (error->code != ERRORS::NONE)                       \
                                             {                                                      \
                                                 return PrintError(__LOG_STREAM__, error, __func__, \
