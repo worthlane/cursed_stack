@@ -212,15 +212,15 @@ int StackOk(Stack_t* stk)
 
     ON_CANARY
     (
-        canary_t* prefix_canary  = (canary_t*)((char*) stk->data - sizeof(canary_t));
-        canary_t* postfix_canary = (canary_t*)((char*) stk->data + stk->capacity * sizeof(elem_t));
+        canary_t* prefix_canary  = GetPrefixDataCanary(stk);
+        canary_t* postfix_canary = GetPostfixDataCanary(stk);
 
         if (!VerifyCanary(prefix_canary, postfix_canary))           error |= DATA_CANARY_TRIGGER;
         if (!VerifyCanary(&stk->stack_prefix, &stk->stack_postfix)) error |= DATA_CANARY_TRIGGER
     );
 
     if (stk->capacity <= 0)                                         error |= INVALID_CAPACITY;
-    if (stk->size > stk->capacity || stk->size < 0)                 error |= INVALID_SIZE;
+    if (stk->size > stk->capacity)                                  error |= INVALID_SIZE;
     if (stk->data == nullptr && stk->capacity != 0)                 error |= INVALID_DATA;
 
     ON_HASH
@@ -273,7 +273,7 @@ static bool VerifyStackHash(const Stack_t* stk)
     (
         hash_t current_hash = stk->stack_hash;
 
-        if (current_hash != ReInitStackHash(stk))
+        if (current_hash != GetStackHash(stk))
             return false;
 
         return true
@@ -292,7 +292,7 @@ static bool VerifyDataHash(const Stack_t* stk)
     (
         hash_t current_hash = stk->data_hash;
 
-        if (current_hash != ReInitDataHash(stk))
+        if (current_hash != GetDataHash(stk))
             return false;
 
         return true
@@ -303,7 +303,7 @@ static bool VerifyDataHash(const Stack_t* stk)
 
 //-----------------------------------------------------------------------------------------------------
 
-hash_t ReInitDataHash(const Stack_t* stk)
+hash_t GetDataHash(const Stack_t* stk)
 {
     assert(stk);
 
@@ -328,12 +328,13 @@ hash_t ReInitDataHash(const Stack_t* stk)
 
 //-----------------------------------------------------------------------------------------------------
 
-hash_t ReInitStackHash(const Stack_t* stk)
+hash_t GetStackHash(const Stack_t* stk)
 {
     assert(stk);
 
     hash_t new_hash = 0;
 
+#pragma GCC diagnostic ignored "-Wcast-qual"
     ON_HASH
     (
         hash_t stack_hash = stk->stack_hash;
@@ -343,6 +344,7 @@ hash_t ReInitStackHash(const Stack_t* stk)
 
         ((Stack_t*) stk)->stack_hash = stack_hash
     );
+#pragma GCC diagnostic warning "-Wcast-qual"
 
     return new_hash;;
 }
@@ -365,8 +367,8 @@ int StackDump(FILE* fp, const Stack_t* stk, const char* func, const char* file, 
 
     ON_CANARY
     (
-        fprintf(fp, "STACK PREFIX CANARY  > %X\n"
-                    "STACK POSTFIX CANARY > %X\n",
+        fprintf(fp, "STACK PREFIX CANARY  > %llX\n"
+                    "STACK POSTFIX CANARY > %llX\n",
                     stk->stack_prefix, stk->stack_postfix)
     );
 
@@ -380,7 +382,7 @@ int StackDump(FILE* fp, const Stack_t* stk, const char* func, const char* file, 
                     "STACK CURRENT        > %u\n"
                     "DATA CURRENT         > %u\n",
                     stk->hash_func, stk->stack_hash, stk->data_hash,
-                    ReInitStackHash(stk), ReInitDataHash(stk))
+                    GetStackHash(stk), GetDataHash(stk))
     );
 
     fprintf(fp, "ELEMENTS: \n\n");
@@ -389,11 +391,11 @@ int StackDump(FILE* fp, const Stack_t* stk, const char* func, const char* file, 
 
     ON_CANARY
     (
-        canary_t* prefix_canary  = (canary_t*)((char*) stk->data - sizeof(canary_t));
-        canary_t* postfix_canary = (canary_t*)((char*) stk->data + stk->capacity * sizeof(elem_t));
+        canary_t* prefix_canary  = GetPrefixDataCanary(stk);
+        canary_t* postfix_canary = GetPostfixDataCanary(stk);
 
-        fprintf(fp, "PREFIX DATA CANARY  > %X\n"
-                    "POSTFIX DATA CANARY > %X\n", *prefix_canary, *postfix_canary)
+        fprintf(fp, "PREFIX DATA CANARY  > %llX\n"
+                    "POSTFIX DATA CANARY > %llX\n", *prefix_canary, *postfix_canary)
     );
 
     LOG_END();
@@ -407,9 +409,24 @@ static inline void ReInitAllHashes(Stack_t* stk)
 {
     ON_HASH
     (
-        stk->data_hash  = ReInitDataHash(stk);
-        stk->stack_hash = ReInitStackHash(stk)
+        stk->data_hash  = GetDataHash(stk);
+        stk->stack_hash = GetStackHash(stk)
     );
+}
+
+//-----------------------------------------------------------------------------------------------------
+
+size_t CountDataSize(size_t capacity)
+{
+    size_t size = capacity * sizeof(elem_t);
+
+    ON_CANARY
+    (
+        size += 2 * sizeof(canary_t);
+        size += size % 8;
+    );
+
+    return size;
 }
 
 //-----------------------------------------------------------------------------------------------------
@@ -420,4 +437,22 @@ static inline bool EmptyStackCheck(Stack_t* stk)
         return true;
 
     return false;
+}
+
+//-----------------------------------------------------------------------------------------------------
+
+canary_t* GetPostfixDataCanary(const Stack_t* stk)
+{
+    canary_t* postfix_canary = (canary_t*)((char*) stk->data +
+                                            CountDataSize(stk->capacity) - 2 * sizeof(canary_t));
+    return postfix_canary;
+}
+
+//-----------------------------------------------------------------------------------------------------
+
+canary_t* GetPrefixDataCanary(const Stack_t* stk)
+{
+    canary_t* prefix_canary  = (canary_t*)((char*) stk->data - sizeof(canary_t));
+
+    return prefix_canary;
 }

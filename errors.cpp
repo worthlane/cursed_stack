@@ -18,38 +18,39 @@ int PrintError(FILE* fp, struct ErrorInfo* error, const char* func, const char* 
 
         case (ERRORS::OPEN_FILE):
             fprintf(fp, "OPEN FILE ERROR\n"
-                        "FAILED TO OPEN FILE \"%s\"\n", error->data);
+                        "FAILED TO OPEN FILE \"%s\"\n", (char*) error->data);
             LOG_END();
             return (int) error->code;
 
         case (ERRORS::READ_FILE):
             fprintf(fp, "READ FILE ERROR\n"
-                        "FAILED TO READ INFO FROM FILE \"%s\"\n", error->data);
+                        "FAILED TO READ INFO FROM FILE \"%s\"\n", (char*) error->data);
             LOG_END();
             return (int) error->code;
 
         case (ERRORS::ALLOCATE_MEMORY):
             fprintf(fp, "MEMORY ALLOCATE ERROR\n"
-                        "FAILED TO ALLOCATE MEMORY IN \"%s\"\n", error->data);
+                        "FAILED TO ALLOCATE MEMORY IN \"%s\"\n", (char*) error->data);
             LOG_END();
             return (int) error->code;
 
         case (ERRORS::PRINT_DATA):
             fprintf(fp, "DATA PRINT ERROR\n"
-                        "FAILED TO PRINT DATA IN \"%s\"\n", error->data);
+                        "FAILED TO PRINT DATA IN \"%s\"\n", (char*) error->data);
             LOG_END();
             return (int) error->code;
 
         case (ERRORS::INVALID_STACK):
-            fprintf(fp, "INVALID STACK ERROR\n", error->data);
+            fprintf(fp, "INVALID STACK ERROR\n");
             LOG_END();
             return (int) error->code;
 
         case (ERRORS::EMPTY_STACK):
-            fprintf(fp, "CAN'T POP ELEMENT FROM EMPTY STACK\n", error->data);
+            fprintf(fp, "CAN'T POP ELEMENT FROM EMPTY STACK\n");
             LOG_END();
             return (int) error->code;
 
+        case (ERRORS::UNKNOWN):
         default:
             fprintf(fp, "UNKNOWN ERROR\n");
             LOG_END();
@@ -80,19 +81,19 @@ void PrintStackCondition(FILE* fp, int error, const Stack_t* stk)
                     stk->data);
 
     #if CANARY_PROTECT
-    canary_t* prefix_canary  = (canary_t*)((char*) stk->data - sizeof(canary_t));
-    canary_t* postfix_canary = (canary_t*)((char*) stk->data + stk->capacity * sizeof(elem_t));
+    canary_t* prefix_canary  = GetPrefixDataCanary(stk);
+    canary_t* postfix_canary = GetPostfixDataCanary(stk);
 
     if ((error & DATA_CANARY_TRIGGER) != 0)
         fprintf(fp, "DATA CANARY TRIGGERED\n"
-                    "LEFT CANARY:     %zu\n"
-                    "RIGHT CANARY:    %zu\n",
+                    "LEFT CANARY:     %llu\n"
+                    "RIGHT CANARY:    %llu\n",
                     *prefix_canary, *postfix_canary);
 
     if ((error & STACK_CANARY_TRIGGER) != 0)
         fprintf(fp, "STACK CANARY TRIGGERED\n"
-                    "LEFT CANARY:     %zu\n"
-                    "RIGHT CANARY:    %zu\n",
+                    "LEFT CANARY:     %llu\n"
+                    "RIGHT CANARY:    %llu\n",
                     stk->stack_prefix, stk->stack_postfix);
     #endif
 
@@ -108,14 +109,14 @@ void PrintStackCondition(FILE* fp, int error, const Stack_t* stk)
                     "EXPECTED:     %u\n"
                     "CURRENT:      %u\n",
                     stk->data_hash,
-                    ReInitDataHash(stk));
+                    GetDataHash(stk));
 
     if ((error & INCORRECT_STACK_HASH) != 0)
         fprintf(fp, "INCORRECT DATA HASH\n"
                     "EXPECTED:     %u\n"
                     "CURRENT:      %u\n",
                     stk->stack_hash,
-                    ReInitStackHash(stk));
+                    GetStackHash(stk));
     #endif
 
     LOG_PRINT(">>>>>>>>STACK CONDITIONS END<<<<<<<\n");

@@ -148,7 +148,7 @@ int StackOk(Stack_t* stk);
  * @param[in] stk stack pointer
  * @return hash_t data hash
  ***********************************************************/
-hash_t ReInitDataHash(const Stack_t* stk);
+hash_t GetDataHash(const Stack_t* stk);
 
 /************************************************************//**
  * @brief Counts stack hash
@@ -156,6 +156,41 @@ hash_t ReInitDataHash(const Stack_t* stk);
  * @param[in] stk stack pointer
  * @return hash_t stack hash
  ************************************************************/
-hash_t ReInitStackHash(const Stack_t* stk);
+hash_t GetStackHash(const Stack_t* stk);
+
+#define CHECK_STACK(stk, stack_error)           stack_error = StackOk(stk);                         \
+                                                if (Global_stack_error != OK)                       \
+                                                {                                                   \
+                                                    STACK_DUMP(stk);                                \
+                                                    PrintStackCondition(__LOG_STREAM__,             \
+                                                                        Global_stack_error, stk);   \
+                                                    PrintSeparator(__LOG_STREAM__);                 \
+                                                    return (int) ERRORS::INVALID_STACK;             \
+                                                }
+
+/************************************************************//**
+ * @brief Counts data size
+ *
+ * @param[in] capacity data capacity
+ * @return size_t data size
+ ************************************************************/
+size_t CountDataSize(size_t capacity);
+
+/************************************************************//**
+ * @brief Get the prefix data canary
+ *
+ * @param[in] stk stack pointer
+ * @return canary_t* pointer to prefix canary
+ ************************************************************/
+canary_t* GetPrefixDataCanary(const Stack_t* stk);
+
+/************************************************************//**
+ * @brief Get the postfix data canary
+ *
+ * @param[in] stk stack pointer
+ * @return canary_t* pointer to postfix canary
+ ************************************************************/
+canary_t* GetPostfixDataCanary(const Stack_t* stk);
+
 
 #endif

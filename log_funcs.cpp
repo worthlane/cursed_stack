@@ -10,6 +10,8 @@
 
 FILE* __LOG_STREAM__ = stderr;
 
+static const char* EXTENSION = ".log";
+
 void OpenLogFile(const char* FILE_NAME)
 {
     char* file_name = strdup(FILE_NAME);

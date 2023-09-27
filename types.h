@@ -12,6 +12,6 @@ typedef unsigned int hash_t;
 /// hash function type
 typedef hash_t (*hash_f) (const void* obj, size_t size);
 /// canary type
-typedef long long int canary_t;
+typedef long long unsigned int canary_t;
 
-#define PRINT_ELEM_T "%zu"
+#define PRINT_ELEM_T "%lld"

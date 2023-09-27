@@ -14,7 +14,7 @@ hash_t MurmurHash (const void* obj, size_t size)
     const int    r    = 24;
     hash_t       k    = 0;
 
-    hash_t hash = seed ^ size;
+    hash_t hash = (hash_t) (seed ^ size);
 
     while (size >= 4)
     {
@@ -37,7 +37,9 @@ hash_t MurmurHash (const void* obj, size_t size)
     switch (size)
     {
         case 3:         hash ^= data[2] << 16;
+        // fall through
         case 2:         hash ^= data[8] << 8;
+        // fall through
         default:        hash ^= data[0];
                         hash *= m;
     }

@@ -18,8 +18,6 @@ enum class ERRORS
     OPEN_FILE,
     /// error while reading file
     READ_FILE,
-    /// error while closing file
-    CLOSE_FILE,
 
     /// error with memory allocating
     ALLOCATE_MEMORY,
