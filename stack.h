@@ -67,8 +67,6 @@ struct Stack
     size_t size;
     /// stack capacity
     size_t capacity;
-    /// reserved capacity (if program can't allocate memory)
-    size_t reserved;
 
     ON_HASH
     (

@@ -77,3 +77,14 @@ int PrintStackData(FILE* fp, const Stack_t* stk)
 
     return (int) ERRORS::NONE;
 }
+
+//-----------------------------------------------------------------------------------------------------
+
+int LogDump(dump_f dump_func, const Stack_t* stk, const char* func, const char* file, const int line)
+{
+    assert(dump_func);
+    assert(stk);
+
+    return dump_func(__LOG_STREAM__, stk, func, file, line);
+}
+

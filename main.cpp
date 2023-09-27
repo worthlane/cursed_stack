@@ -20,4 +20,24 @@ int main(const int argc, const char* argv[])
 
     error.code = (ERRORS) StackCtor(&stk, 6);
     EXIT_IF_ERROR(error_ptr);
+
+    StackPush(&stk, 7);
+    StackPush(&stk, 7);
+    StackPush(&stk, 7);
+    StackPush(&stk, 7);
+    StackPush(&stk, 7);
+    StackPush(&stk, 7);
+    StackPush(&stk, 7);
+    StackPush(&stk, 7);
+
+    elem_t a = 0;
+
+    StackPop(&stk, &a);
+    StackPop(&stk, &a);
+    StackPop(&stk, &a);
+    StackPop(&stk, &a);
+    StackPop(&stk, &a);
+    StackPop(&stk, &a);
+
+    STACK_DUMP(&stk);
 }

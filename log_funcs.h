@@ -41,6 +41,8 @@ void PrintSeparator(FILE* fp);
  ************************************************************/
 int PrintStackData(FILE* fp, const Stack_t* stk);
 
+int LogDump(dump_f dump_func, const Stack_t* stk, const char* func, const char* file, const int line);
+
 #ifdef LOG_PRINT
 #undef LOG_PRINT
 
@@ -69,7 +71,7 @@ int PrintStackData(FILE* fp, const Stack_t* stk);
 #undef STACK_DUMP
 
 #endif
-#define STACK_DUMP(stk)                     StackDump(__LOG_STREAM__, stk, __func__, __FILE__, __LINE__)
+#define STACK_DUMP(stk)                     LogDump(StackDump, stk, __func__, __FILE__, __LINE__)
 
 #ifdef LOG_SEPARATOR
 #undef LOG_SEPARATOR

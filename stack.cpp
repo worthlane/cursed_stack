@@ -18,6 +18,8 @@ static inline void ReInitAllHashes(Stack_t* stk);
 
 static int Global_stack_error = 0;
 
+static const elem_t POISON = NAN;
+
 int StackCtor(Stack_t* stk, size_t capacity)
 {
     assert(stk);
@@ -48,7 +50,6 @@ int StackCtor(Stack_t* stk, size_t capacity)
     stk->data     = first_elem;
     stk->size     = 0;
     stk->capacity = capacity;
-    stk->reserved = capacity;
 
     ON_HASH
     (
@@ -163,8 +164,6 @@ int StackRealloc(Stack_t* stk, size_t new_capacity)
 
     stk->data     = first_elem;
     stk->capacity = new_capacity;
-    if (new_capacity < stk->reserved)
-        stk->reserved = new_capacity;
 
     ReInitAllHashes(stk);
 
@@ -183,8 +182,10 @@ int StackPop(Stack_t* stk, elem_t* ret_value)
     if (EmptyStackCheck(stk))
         return (int) ERRORS::EMPTY_STACK;
 
+    CHECK_STACK(stk, Global_stack_error);
+
     *(ret_value) = (stk->data)[--(stk->size)];
-    (stk->data)[(stk->size)] = 0;
+    (stk->data)[(stk->size)] = POISON;
 
     ReInitAllHashes(stk);
 
@@ -312,7 +313,7 @@ hash_t GetDataHash(const Stack_t* stk)
     ON_HASH
     (
         elem_t* data = stk->data;
-        size_t data_size = stk->reserved * sizeof(elem_t);
+        size_t data_size = stk->capacity * sizeof(elem_t);
 
         ON_CANARY
         (

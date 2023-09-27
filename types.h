@@ -2,8 +2,10 @@
 * \brief Contains all info about typed
 */
 
+#include <math.h>
+
 /// stack element type
-typedef long long int elem_t;
+typedef double elem_t;
 /// stack type
 typedef struct Stack Stack_t;
 
@@ -14,4 +16,6 @@ typedef hash_t (*hash_f) (const void* obj, size_t size);
 /// canary type
 typedef long long unsigned int canary_t;
 
-#define PRINT_ELEM_T "%lld"
+typedef int (*dump_f)(FILE*, const Stack_t*, const char*, const char*, const int);
+
+#define PRINT_ELEM_T "%lf"
