@@ -48,7 +48,22 @@
 #define ON_HASH(...) ;
 #endif
 
-static const size_t MIN_CAPACITY = 1;           /// minimal stack capacity
+#ifdef STACK_DUMP
+#undef STACK_DUMP
+
+#endif
+#define STACK_DUMP(stk)     LogDump(StackDump, stk, __func__, __FILE__, __LINE__)
+
+#ifdef CHECK_STACK
+#define CHECK_STACK
+
+#endif
+#define CHECK_STACK(stk, stack_error)           stack_error = StackOk(stk);                         \
+                                                if (stack_error != OK)                              \
+                                                {                                                   \
+                                                    STACK_DUMP(stk);                                \
+                                                    return (int) ERRORS::INVALID_STACK;             \
+                                                }
 
 static const canary_t canary_val = 0xDEADDEAD;  /// canary value
 
@@ -112,15 +127,6 @@ int StackDtor(Stack_t* stk);
 int StackPush(Stack_t* stk, elem_t value);
 
 /************************************************************//**
- * @brief Changes stack capacity
- *
- * @param[in] stk stack pointer
- * @param[in] new_capacity new stack capacity
- * @return int error code
- *************************************************************/
-int StackRealloc(Stack_t* stk, size_t new_capacity);
-
-/************************************************************//**
  * @brief Pops element from stack
  *
  * @param[in] stk stack pointer
@@ -139,7 +145,7 @@ int StackPop(Stack_t* stk, elem_t* ret_value);
  * @param[in] line line, where print caled
  * @return int error code
  ************************************************************/
-int StackDump(FILE* fp, void* stk, const char* func, const char* file, const int line);
+int StackDump(FILE* fp, const void* stk, const char* func, const char* file, const int line);
 
 /************************************************************//**
  * @brief Verifies stack
@@ -147,61 +153,6 @@ int StackDump(FILE* fp, void* stk, const char* func, const char* file, const int
  * @param[in] stk stack pointer
  * @return int stack condition code
  ************************************************************/
-int StackOk(Stack_t* stk);
-
-/************************************************************//**
- * @brief Counts data hash
- *
- * @param[in] stk stack pointer
- * @return hash_t data hash
- ***********************************************************/
-hash_t GetDataHash(const Stack_t* stk);
-
-/************************************************************//**
- * @brief Counts stack hash
- *
- * @param[in] stk stack pointer
- * @return hash_t stack hash
- ************************************************************/
-hash_t GetStackHash(const Stack_t* stk);
-
-#ifdef CHECK_STACK
-#define CHECK_STACK
-
-#endif
-#define CHECK_STACK(stk, stack_error)           stack_error = StackOk(stk);                         \
-                                                if (Global_stack_error != OK)                       \
-                                                {                                                   \
-                                                    STACK_DUMP(stk);                                \
-                                                    PrintStackCondition(__LOG_STREAM__,             \
-                                                                        Global_stack_error, stk);   \
-                                                    PrintSeparator(__LOG_STREAM__);                 \
-                                                    return (int) ERRORS::INVALID_STACK;             \
-                                                }
-
-/************************************************************//**
- * @brief Counts data size
- *
- * @param[in] capacity data capacity
- * @return size_t data size
- ************************************************************/
-size_t CountDataSize(size_t capacity);
-
-/************************************************************//**
- * @brief Get the prefix data canary
- *
- * @param[in] stk stack pointer
- * @return canary_t* pointer to prefix canary
- ************************************************************/
-canary_t* GetPrefixDataCanary(const Stack_t* stk);
-
-/************************************************************//**
- * @brief Get the postfix data canary
- *
- * @param[in] stk stack pointer
- * @return canary_t* pointer to postfix canary
- ************************************************************/
-canary_t* GetPostfixDataCanary(const Stack_t* stk);
-
+int StackOk(const Stack_t* stk);
 
 #endif

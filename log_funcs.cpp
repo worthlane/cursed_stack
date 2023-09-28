@@ -7,7 +7,6 @@
 #include "log_funcs.h"
 #include "errors.h"
 #include "stack.h"
-#include "types.h"
 
 FILE* __LOG_STREAM__ = stderr;
 
@@ -41,13 +40,7 @@ void OpenLogFile(const char* FILE_NAME)
     fputc('\n', __LOG_STREAM__);
 
     atexit(CloseLogFile);
-}
-
-//-----------------------------------------------------------------------------------------------------
-
-void PrintSeparator(FILE* fp)
-{
-    fprintf(fp, "\n........................................\n\n");
+    free(file_name);
 }
 
 //-----------------------------------------------------------------------------------------------------
@@ -81,7 +74,7 @@ int PrintStackData(FILE* fp, const Stack_t* stk)
 
 //-----------------------------------------------------------------------------------------------------
 
-int LogDump(dump_f dump_func, void* stk, const char* func, const char* file, const int line)
+int LogDump(dump_f dump_func, const void* stk, const char* func, const char* file, const int line)
 {
     assert(dump_func);
     assert(stk);

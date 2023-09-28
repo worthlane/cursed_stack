@@ -26,13 +26,6 @@ void OpenLogFile(const char* FILE_NAME);
 void CloseLogFile();
 
 /************************************************************//**
- * @brief Prints separator in output stream
- *
- * @param[in] fp output stream
- ***********************************************************/
-void PrintSeparator(FILE* fp);
-
-/************************************************************//**
  * @brief Prints elements(data) from stack
  *
  * @param[in] fp output stream
@@ -41,15 +34,9 @@ void PrintSeparator(FILE* fp);
  ************************************************************/
 int PrintStackData(FILE* fp, const Stack_t* stk);
 
-int LogDump(dump_f dump_func, void* stk, const char* func, const char* file, const int line);
+int LogDump(dump_f dump_func, const void* stk, const char* func, const char* file, const int line);
 
 int PrintLog (const char *format, ...);
-
-#ifdef LOG_PRINT
-#undef LOG_PRINT
-
-#endif
-#define LOG_PRINT(...)      PrintLog(__VA_ARGS__)
 
 #ifdef LOG_START
 #undef LOG_START
@@ -67,12 +54,6 @@ int PrintLog (const char *format, ...);
                                      "--------------------------------------------------\n", \
                                      __TIME__)
 
-#ifdef STACK_DUMP
-#undef STACK_DUMP
-
-#endif
-#define STACK_DUMP(stk)     LogDump(StackDump, stk, __func__, __FILE__, __LINE__)
-
 #ifdef LOG_SEPARATOR
 #undef LOG_SEPARATOR
 
@@ -83,7 +64,7 @@ int PrintLog (const char *format, ...);
 #undef LOG_START_MOD
 
 #endif
-#define LOG_START_MOD(func, file, line)     PrintLog(                                         \
+#define LOG_START_MOD(func, file, line)     PrintLog(                                                       \
                                                     "--------------------LOG CALLED--------------------\n"  \
                                                     "RUNNING FUNCTION %s FROM FILE \"%s\"(%d)\n",           \
                                                     func, file, line)
@@ -92,10 +73,10 @@ int PrintLog (const char *format, ...);
 #undef EXIT_IF_ERROR
 
 #endif
-#define EXIT_IF_ERROR(error)                if (error->code != ERRORS::NONE)                       \
-                                            {                                                      \
-                                                return LogDump(PrintError, error, __func__, \
-                                                                  __FILE__, __LINE__);             \
+#define EXIT_IF_ERROR(error)                if (error->code != ERRORS::NONE)                        \
+                                            {                                                       \
+                                                return LogDump(PrintError, error, __func__,         \
+                                                                  __FILE__, __LINE__);              \
                                             }
 
 

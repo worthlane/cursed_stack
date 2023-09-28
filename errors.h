@@ -6,7 +6,6 @@
 */
 
 #include "types.h"
-#include "stack.h"
 
 /// @brief list of errors
 enum class ERRORS
@@ -79,15 +78,6 @@ enum StackCondition
  * @param[in] line line where error happened
  * @return int error code
  ************************************************************/
-int PrintError(FILE* fp, void* error, const char* func, const char* file, const int line);
-
-/************************************************************//**
- * @brief Prints stack condition
- *
- * @param[in] fp output stream
- * @param[in] error error
- * @param[in] stk stack pointer
- ************************************************************/
-void PrintStackCondition(FILE* fp, int error, const Stack_t* stk);
+int PrintError(FILE* fp, const void* error, const char* func, const char* file, const int line);
 
 #endif

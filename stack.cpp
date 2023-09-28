@@ -2,32 +2,45 @@
 #include <assert.h>
 
 #include "stack.h"
-#include "errors.h"
 #include "log_funcs.h"
-#include "types.h"
 #include "hash.h"
+
+// ============= STATIC FUNCS ===============
 
 static inline bool EmptyStackCheck(Stack_t* stk);
 
 static void InitCanary(canary_t* prefix_canary, canary_t* postfix_canary);
 static bool VerifyCanary(const canary_t* prefix_canary, const canary_t* postfix_canary);
+static canary_t* GetPostfixDataCanary(const Stack_t* stk);
+static canary_t* GetPrefixDataCanary(const Stack_t* stk);
 
+static size_t CountDataSize(size_t capacity);
+
+static hash_t GetDataHash(const Stack_t* stk);
+static hash_t GetStackHash(const Stack_t* stk);
 static bool VerifyDataHash(const Stack_t* stk);
 static bool VerifyStackHash(const Stack_t* stk);
 static inline void ReInitAllHashes(Stack_t* stk);
 
+static int StackRealloc(Stack_t* stk, size_t new_capacity);
+
+static inline bool IsStackInvalid(const Stack* stack);
+
+static void PrintStackCondition(const Stack_t* stk, int error);
+//============================================
+
 static int Global_stack_error = 0;
 
 static const elem_t POISON = NAN;
+
+static const size_t MIN_CAPACITY = 16;
 
 int StackCtor(Stack_t* stk, size_t capacity)
 {
     assert(stk);
 
     elem_t* data       = nullptr;
-    size_t data_size   = capacity * sizeof(elem_t);
-
-    ON_CANARY(data_size += 2 * sizeof(canary_t));
+    size_t data_size   = CountDataSize(capacity);
 
     data = (elem_t*) calloc(data_size, 1);
 
@@ -59,7 +72,8 @@ int StackCtor(Stack_t* stk, size_t capacity)
 
     ReInitAllHashes(stk);
 
-    CHECK_STACK(stk, Global_stack_error);
+    if (IsStackInvalid(stk))
+        return (int) ERRORS::INVALID_STACK;
 
     return (int) ERRORS::NONE;
 }
@@ -70,7 +84,8 @@ int StackDtor(Stack_t* stk)
 {
     assert(stk);
 
-    CHECK_STACK(stk, Global_stack_error);
+    if (IsStackInvalid(stk))
+        return (int) ERRORS::INVALID_STACK;
 
     OFF_CANARY(elem_t* data = stk->data);
 
@@ -105,11 +120,12 @@ int StackPush(Stack_t* stk, elem_t value)
     assert(stk);
     assert(stk->data);
 
-    CHECK_STACK(stk, Global_stack_error);
+    if (IsStackInvalid(stk))
+        return (int) ERRORS::INVALID_STACK;
 
     if (stk->capacity == stk->size)
     {
-        if (StackRealloc(stk, 2 * stk->capacity) != (int) ERRORS::NONE)
+        if (StackRealloc(stk, stk->capacity << 1) != (int) ERRORS::NONE)
             return (int) ERRORS::ALLOCATE_MEMORY;
     }
 
@@ -117,18 +133,20 @@ int StackPush(Stack_t* stk, elem_t value)
 
     ReInitAllHashes(stk);
 
-    CHECK_STACK(stk, Global_stack_error);
+    if (IsStackInvalid(stk))
+        return (int) ERRORS::INVALID_STACK;
 
     return (int) ERRORS::NONE;
 }
 
 //-----------------------------------------------------------------------------------------------------
 
-int StackRealloc(Stack_t* stk, size_t new_capacity)
+static int StackRealloc(Stack_t* stk, size_t new_capacity)
 {
     assert(stk);
 
-    CHECK_STACK(stk, Global_stack_error);
+    if (IsStackInvalid(stk))
+        return (int) ERRORS::INVALID_STACK;
 
     if (new_capacity == 0)
         new_capacity = MIN_CAPACITY;
@@ -167,7 +185,8 @@ int StackRealloc(Stack_t* stk, size_t new_capacity)
 
     ReInitAllHashes(stk);
 
-    CHECK_STACK(stk, Global_stack_error);
+    if (IsStackInvalid(stk))
+        return (int) ERRORS::INVALID_STACK;
 
     return (int) ERRORS::NONE;
 }
@@ -182,30 +201,32 @@ int StackPop(Stack_t* stk, elem_t* ret_value)
     if (EmptyStackCheck(stk))
         return (int) ERRORS::EMPTY_STACK;
 
-    CHECK_STACK(stk, Global_stack_error);
+    if (IsStackInvalid(stk))
+        return (int) ERRORS::INVALID_STACK;
 
     *(ret_value) = (stk->data)[--(stk->size)];
     (stk->data)[(stk->size)] = POISON;
 
     ReInitAllHashes(stk);
 
-    if (stk->size <= stk->capacity / 2)
+    if (stk->size <= stk->capacity >> 2)
     {
-        int realloc_error  = StackRealloc(stk, stk->capacity / 2);
+        int realloc_error  = StackRealloc(stk, stk->capacity >> 1);
         if (realloc_error != (int) ERRORS::NONE)
             return realloc_error;
     }
 
     ReInitAllHashes(stk);
 
-    CHECK_STACK(stk, Global_stack_error);
+    if (IsStackInvalid(stk))
+        return (int) ERRORS::INVALID_STACK;
 
     return (int) ERRORS::NONE;
 }
 
 //-----------------------------------------------------------------------------------------------------
 
-int StackOk(Stack_t* stk)
+int StackOk(const Stack_t* stk)
 {
     assert(stk);
 
@@ -304,7 +325,7 @@ static bool VerifyDataHash(const Stack_t* stk)
 
 //-----------------------------------------------------------------------------------------------------
 
-hash_t GetDataHash(const Stack_t* stk)
+static hash_t GetDataHash(const Stack_t* stk)
 {
     assert(stk);
 
@@ -329,7 +350,7 @@ hash_t GetDataHash(const Stack_t* stk)
 
 //-----------------------------------------------------------------------------------------------------
 
-hash_t GetStackHash(const Stack_t* stk)
+static hash_t GetStackHash(const Stack_t* stk)
 {
     assert(stk);
 
@@ -352,7 +373,7 @@ hash_t GetStackHash(const Stack_t* stk)
 
 //-----------------------------------------------------------------------------------------------------
 
-int StackDump(FILE* fp, void* stack, const char* func, const char* file, const int line)
+int StackDump(FILE* fp, const void* stack, const char* func, const char* file, const int line)
 {
     assert(stack);
     assert(func);
@@ -401,6 +422,15 @@ int StackDump(FILE* fp, void* stack, const char* func, const char* file, const i
                     "POSTFIX DATA CANARY > %llX\n", *prefix_canary, *postfix_canary)
     );
 
+    int error = 0;
+    error = StackOk(stk);
+    if (error != 0)
+    {
+        PrintStackCondition(stk, error);
+        LOG_END();
+        return (int) ERRORS::INVALID_STACK;
+    }
+
     LOG_END();
 
     return (int) ERRORS::NONE;
@@ -419,7 +449,7 @@ static inline void ReInitAllHashes(Stack_t* stk)
 
 //-----------------------------------------------------------------------------------------------------
 
-size_t CountDataSize(size_t capacity)
+static size_t CountDataSize(size_t capacity)
 {
     size_t size = capacity * sizeof(elem_t);
 
@@ -444,7 +474,7 @@ static inline bool EmptyStackCheck(Stack_t* stk)
 
 //-----------------------------------------------------------------------------------------------------
 
-canary_t* GetPostfixDataCanary(const Stack_t* stk)
+static canary_t* GetPostfixDataCanary(const Stack_t* stk)
 {
     canary_t* postfix_canary = (canary_t*)((char*) stk->data +
                                             CountDataSize(stk->capacity) - 2 * sizeof(canary_t));
@@ -453,9 +483,88 @@ canary_t* GetPostfixDataCanary(const Stack_t* stk)
 
 //-----------------------------------------------------------------------------------------------------
 
-canary_t* GetPrefixDataCanary(const Stack_t* stk)
+static canary_t* GetPrefixDataCanary(const Stack_t* stk)
 {
     canary_t* prefix_canary  = (canary_t*)((char*) stk->data - sizeof(canary_t));
 
     return prefix_canary;
+}
+
+//-----------------------------------------------------------------------------------------------------
+
+static void PrintStackCondition(const Stack_t* stk, int error)
+{
+    PrintLog(">>>>>>>>>>STACK CONDITIONS<<<<<<<<<\n");
+
+    if ((error & INVALID_CAPACITY) != 0)
+        PrintLog("INVALID STACK CAPACITY\n"
+                    "SIZE:     %zu\n"
+                    "CAPACITY: %zu\n",
+                    stk->size, stk->capacity);
+
+    if ((error & INVALID_SIZE) != 0)
+        PrintLog("INVALID STACK SIZE\n"
+                    "SIZE:     %zu\n",
+                    stk->size);
+
+    if ((error & INVALID_DATA) != 0)
+        PrintLog("INVALID STACK DATA\n"
+                    "DATA:     [%p]\n",
+                    stk->data);
+
+    #if CANARY_PROTECT
+    canary_t* prefix_canary  = GetPrefixDataCanary(stk);
+    canary_t* postfix_canary = GetPostfixDataCanary(stk);
+
+    if ((error & DATA_CANARY_TRIGGER) != 0)
+        PrintLog("DATA CANARY TRIGGERED\n"
+                    "LEFT CANARY:     %llu\n"
+                    "RIGHT CANARY:    %llu\n",
+                    *prefix_canary, *postfix_canary);
+
+    if ((error & STACK_CANARY_TRIGGER) != 0)
+        PrintLog("STACK CANARY TRIGGERED\n"
+                    "LEFT CANARY:     %llu\n"
+                    "RIGHT CANARY:    %llu\n",
+                    stk->stack_prefix, stk->stack_postfix);
+    #endif
+
+    #if HASH_PROTECT
+
+    if ((error & INVALID_HASH_FUNC) != 0)
+        PrintLog("INVALID HASH FUNCTION\n"
+                    "FUNC:     [%p]\n",
+                    stk->hash_func);
+
+    if ((error & INCORRECT_DATA_HASH) != 0)
+        PrintLog("INCORRECT DATA HASH\n"
+                    "EXPECTED:     %u\n"
+                    "CURRENT:      %u\n",
+                    stk->data_hash,
+                    GetDataHash(stk));
+
+    if ((error & INCORRECT_STACK_HASH) != 0)
+        PrintLog("INCORRECT DATA HASH\n"
+                    "EXPECTED:     %u\n"
+                    "CURRENT:      %u\n",
+                    stk->stack_hash,
+                    GetStackHash(stk));
+    #endif
+
+    PrintLog(">>>>>>>>STACK CONDITIONS END<<<<<<<\n");
+}
+
+//-----------------------------------------------------------------------------------------------------
+
+static inline bool IsStackInvalid(const Stack* stack)
+{
+    int stack_error = StackOk(stack);
+    if (stack_error != OK)
+    {
+        const void* stk = (const void*) stack;
+        STACK_DUMP(stk);
+        return true;
+    }
+
+    return false;
 }

@@ -2,15 +2,13 @@
 #include <assert.h>
 
 #include "errors.h"
-#include "mylib/colorlib.h"
 #include "log_funcs.h"
-#include "stack.h"
 #include "types.h"
 
-int PrintError(FILE* fp, void* err, const char* func, const char* file, const int line)
+int PrintError(FILE* fp, const void* err, const char* func, const char* file, const int line)
 {
     assert(err);
-    
+
     LOG_START_MOD(func, file, line);
 
     struct ErrorInfo* error = (struct ErrorInfo*) err;
@@ -61,68 +59,4 @@ int PrintError(FILE* fp, void* err, const char* func, const char* file, const in
             LOG_END();
             return (int) ERRORS::UNKNOWN;
     }
-}
-
-//-----------------------------------------------------------------------------------------------------
-
-void PrintStackCondition(FILE* fp, int error, const Stack_t* stk)
-{
-    LOG_PRINT(">>>>>>>>>>STACK CONDITIONS<<<<<<<<<\n");
-
-    if ((error & INVALID_CAPACITY) != 0)
-        fprintf(fp, "INVALID STACK CAPACITY\n"
-                    "SIZE:     %zu\n"
-                    "CAPACITY: %zu\n",
-                    stk->size, stk->capacity);
-
-    if ((error & INVALID_SIZE) != 0)
-        fprintf(fp, "INVALID STACK SIZE\n"
-                    "SIZE:     %zu\n",
-                    stk->size);
-
-    if ((error & INVALID_DATA) != 0)
-        fprintf(fp, "INVALID STACK DATA\n"
-                    "DATA:     [%p]\n",
-                    stk->data);
-
-    #if CANARY_PROTECT
-    canary_t* prefix_canary  = GetPrefixDataCanary(stk);
-    canary_t* postfix_canary = GetPostfixDataCanary(stk);
-
-    if ((error & DATA_CANARY_TRIGGER) != 0)
-        fprintf(fp, "DATA CANARY TRIGGERED\n"
-                    "LEFT CANARY:     %llu\n"
-                    "RIGHT CANARY:    %llu\n",
-                    *prefix_canary, *postfix_canary);
-
-    if ((error & STACK_CANARY_TRIGGER) != 0)
-        fprintf(fp, "STACK CANARY TRIGGERED\n"
-                    "LEFT CANARY:     %llu\n"
-                    "RIGHT CANARY:    %llu\n",
-                    stk->stack_prefix, stk->stack_postfix);
-    #endif
-
-    #if HASH_PROTECT
-
-    if ((error & INVALID_HASH_FUNC) != 0)
-        fprintf(fp, "INVALID HASH FUNCTION\n"
-                    "FUNC:     [%p]\n",
-                    stk->hash_func);
-
-    if ((error & INCORRECT_DATA_HASH) != 0)
-        fprintf(fp, "INCORRECT DATA HASH\n"
-                    "EXPECTED:     %u\n"
-                    "CURRENT:      %u\n",
-                    stk->data_hash,
-                    GetDataHash(stk));
-
-    if ((error & INCORRECT_STACK_HASH) != 0)
-        fprintf(fp, "INCORRECT DATA HASH\n"
-                    "EXPECTED:     %u\n"
-                    "CURRENT:      %u\n",
-                    stk->stack_hash,
-                    GetStackHash(stk));
-    #endif
-
-    LOG_PRINT(">>>>>>>>STACK CONDITIONS END<<<<<<<\n");
 }
