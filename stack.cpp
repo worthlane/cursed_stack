@@ -46,7 +46,7 @@ static bool Equal(const elem_t* a, const elem_t* b);
 
 // =============CONSTS============
 static const canary_t canary_val = 0xD07ADEAD;
-static const elem_t POISON = NAN;
+static const elem_t POISON       = -228;
 // ===============================
 
 int StackCtor(Stack_t* stk, size_t capacity)
@@ -595,7 +595,10 @@ static int PrintStackData(FILE* fp, const Stack_t* stk)
 
     for (size_t i = stk->size; i < stk->capacity; i++)
     {
-        fprintf(fp, "*[%zu] > " PRINT_ELEM_T "\n", i, stk->data[i]);
+        fprintf(fp, "*[%zu] > " PRINT_ELEM_T, i, stk->data[i]);
+        if (Equal(&(stk->data[i]), &POISON))
+            fprintf(fp, " (POISONED)");
+        fprintf(fp, "\n");
     }
 
     return (int) ERRORS::NONE;
