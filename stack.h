@@ -74,6 +74,8 @@ struct Stack
     size_t capacity;
     /// reserved capacity (that did not allocate somewhere)
     size_t reserved;                               // actually needed for not primitive bug -_-
+    /// stack status (0 if everything is fine)
+    int status;
 
     ON_HASH
     (

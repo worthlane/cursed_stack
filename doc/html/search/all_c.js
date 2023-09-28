@@ -12,5 +12,6 @@ var searchData=
   ['stackdump_9',['StackDump',['../stack_8h.html#aada6e8dcba5173a92adb27e75798937d',1,'stack.cpp']]],
   ['stackok_10',['StackOk',['../stack_8h.html#a69d620b67a1498457ea240e0ac1e7b90',1,'stack.cpp']]],
   ['stackpop_11',['StackPop',['../stack_8h.html#a217957cbadd83dc46a61b48d658422f2',1,'stack.cpp']]],
-  ['stackpush_12',['StackPush',['../stack_8h.html#a0efa32cbafaa5334c3d14603f0155a18',1,'stack.cpp']]]
+  ['stackpush_12',['StackPush',['../stack_8h.html#a0efa32cbafaa5334c3d14603f0155a18',1,'stack.cpp']]],
+  ['status_13',['status',['../struct_stack.html#ae22fdab16f6360d5e879b8d602a5e5f0',1,'Stack']]]
 ];

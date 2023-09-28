@@ -23,8 +23,8 @@ static inline void ReInitAllHashes(Stack_t* stk);
 
 static int StackRealloc(Stack_t* stk, size_t new_capacity);
 
-static inline bool IsStackValid(const Stack* stack, const char* func, const char* file, const int line);
-static void PrintStackCondition(const Stack_t* stk, int error);
+static inline bool IsStackValid(Stack* stack, const char* func, const char* file, const int line);
+static void PrintStackCondition(const Stack_t* stk);
 static int PrintStackData(FILE* fp, const Stack_t* stk);
 
 static void PoisonData(elem_t* left_border, elem_t* right_border);
@@ -77,6 +77,7 @@ int StackCtor(Stack_t* stk, size_t capacity)
     stk->size     = 0;
     stk->capacity = capacity;
     stk->reserved = capacity;
+    stk->status   = OK;
 
     PoisonData(stk->data, (elem_t*)((char*)stk->data + stk->capacity * sizeof(elem_t)));
 
@@ -111,6 +112,7 @@ int StackDtor(Stack_t* stk)
     stk->size     = 0;
     stk->capacity = 0;
     stk->reserved = 0;
+    stk->status   = OK;
 
     ON_CANARY
     (
@@ -216,8 +218,9 @@ int StackPop(Stack_t* stk, elem_t* ret_value)
 
     if (EmptyStackCheck(stk))
     {
+        stk->status |= EMPTY_STACK;
         STACK_DUMP(stk);
-        PrintStackCondition(stk, EMPTY_STACK);
+        PrintStackCondition(stk);
         return (int) ERRORS::INVALID_STACK;
     }
 
@@ -242,37 +245,39 @@ int StackPop(Stack_t* stk, elem_t* ret_value)
 
 //-----------------------------------------------------------------------------------------------------
 
-int StackOk(const Stack_t* stk)
+int StackOk(const Stack_t* stack)
 {
-    assert(stk);
+    assert(stack);
 
-    int error = 0;
+#pragma GCC diagnostic ignored "-Wcast-qual"
+    Stack_t* stk = (Stack_t*) stack;
+#pragma GCC diagnostic warning "-Wcast-qual"
 
     ON_CANARY
     (
         canary_t* prefix_canary  = GetPrefixDataCanary(stk);
         canary_t* postfix_canary = GetPostfixDataCanary(stk);
 
-        if (!VerifyCanary(prefix_canary, postfix_canary))           error |= DATA_CANARY_TRIGGER;
-        if (!VerifyCanary(&stk->stack_prefix, &stk->stack_postfix)) error |= DATA_CANARY_TRIGGER
+        if (!VerifyCanary(prefix_canary, postfix_canary))           stk->status |= DATA_CANARY_TRIGGER;
+        if (!VerifyCanary(&stk->stack_prefix, &stk->stack_postfix)) stk->status |= DATA_CANARY_TRIGGER
     );
 
-    if (stk->capacity <= 0)                                         error |= INVALID_CAPACITY;
-    if (stk->size > stk->capacity)                                  error |= INVALID_SIZE;
-    if (stk->data == nullptr && stk->capacity != 0)                 error |= INVALID_DATA;
+    if (stk->capacity <= 0)                                         stk->status |= INVALID_CAPACITY;
+    if (stk->size > stk->capacity)                                  stk->status |= INVALID_SIZE;
+    if (stk->data == nullptr && stk->capacity != 0)                 stk->status |= INVALID_DATA;
 #pragma GCC diagnostic ignored "-Wcast-qual"
-    if (!PoisonVerify((Stack_t*) stk))                              error |= POISON_ACCESS;
+    if (!PoisonVerify((Stack_t*) stk))                              stk->status |= POISON_ACCESS;
 #pragma GCC diagnostic warning "-Wcast-qual"
 
     ON_HASH
     (
-        if (!stk->hash_func)                                        error |= INVALID_HASH_FUNC;
+        if (!stk->hash_func)                                        stk->status |= INVALID_HASH_FUNC;
 
-        if (!VerifyDataHash(stk))                                   error |= INCORRECT_DATA_HASH;
-        if (!VerifyStackHash(stk))                                  error |= INCORRECT_STACK_HASH
+        if (!VerifyDataHash(stk))                                   stk->status |= INCORRECT_DATA_HASH;
+        if (!VerifyStackHash(stk))                                  stk->status |= INCORRECT_STACK_HASH
     );
 
-    return error;
+    return stk->status;
 }
 
 //-----------------------------------------------------------------------------------------------------
@@ -379,11 +384,14 @@ static hash_t GetStackHash(const Stack_t* stk)
     ON_HASH
     (
         hash_t stack_hash = stk->stack_hash;
+        int    status     = stk->status;
+        ((Stack_t*) stk)->status     = 0;
         ((Stack_t*) stk)->stack_hash = 0;
 
         new_hash = stk->hash_func(stk, sizeof(Stack_t));
 
-        ((Stack_t*) stk)->stack_hash = stack_hash
+        ((Stack_t*) stk)->stack_hash = stack_hash;
+        ((Stack_t*) stk)->status     = status
     );
 #pragma GCC diagnostic warning "-Wcast-qual"
 
@@ -440,6 +448,10 @@ int StackDump(FILE* fp, const void* stack, const char* func, const char* file, c
         fprintf(fp, "PREFIX DATA CANARY  > %llX\n"
                     "POSTFIX DATA CANARY > %llX\n", *prefix_canary, *postfix_canary)
     );
+
+    StackOk(stk);
+    if (stk->status != OK)
+        PrintStackCondition(stk);
 
     LOG_END();
 
@@ -502,43 +514,43 @@ static canary_t* GetPrefixDataCanary(const Stack_t* stk)
 
 //-----------------------------------------------------------------------------------------------------
 
-static void PrintStackCondition(const Stack_t* stk, int error)
+static void PrintStackCondition(const Stack_t* stk)
 {
-    PrintLog(">>>>>>>>>>STACK CONDITIONS<<<<<<<<<\n");
+    PrintLog("\n>>>>>>>>>>STACK CONDITIONS<<<<<<<<<\n");
 
-    if ((error & INVALID_CAPACITY) != 0)
+    if ((stk->status & INVALID_CAPACITY) != 0)
         PrintLog("INVALID STACK CAPACITY\n"
                     "SIZE:     %zu\n"
                     "CAPACITY: %zu\n",
                     stk->size, stk->capacity);
 
-    if ((error & INVALID_SIZE) != 0)
+    if ((stk->status & INVALID_SIZE) != 0)
         PrintLog("INVALID STACK SIZE\n"
                     "SIZE:     %zu\n",
                     stk->size);
 
-    if ((error & INVALID_DATA) != 0)
+    if ((stk->status & INVALID_DATA) != 0)
         PrintLog("INVALID STACK DATA\n"
                     "DATA:     [%p]\n",
                     stk->data);
 
-    if ((error & EMPTY_STACK) != 0)
+    if ((stk->status & EMPTY_STACK) != 0)
         PrintLog("CAN NOT POP ELEMENT FROM EMPTY STACK\n");
 
-    if ((error & POISON_ACCESS) != 0)
+    if ((stk->status & POISON_ACCESS) != 0)
         PrintLog("CAN NOT ACCESS TO POISONED ELEMENT\n");
 
     #if CANARY_PROTECT
     canary_t* prefix_canary  = GetPrefixDataCanary(stk);
     canary_t* postfix_canary = GetPostfixDataCanary(stk);
 
-    if ((error & DATA_CANARY_TRIGGER) != 0)
+    if ((stk->status & DATA_CANARY_TRIGGER) != 0)
         PrintLog("DATA CANARY TRIGGERED\n"
                     "LEFT CANARY:     %llu\n"
                     "RIGHT CANARY:    %llu\n",
                     *prefix_canary, *postfix_canary);
 
-    if ((error & STACK_CANARY_TRIGGER) != 0)
+    if ((stk->status & STACK_CANARY_TRIGGER) != 0)
         PrintLog("STACK CANARY TRIGGERED\n"
                     "LEFT CANARY:     %llu\n"
                     "RIGHT CANARY:    %llu\n",
@@ -547,39 +559,38 @@ static void PrintStackCondition(const Stack_t* stk, int error)
 
     #if HASH_PROTECT
 
-    if ((error & INVALID_HASH_FUNC) != 0)
+    if ((stk->status & INVALID_HASH_FUNC) != 0)
         PrintLog("INVALID HASH FUNCTION\n"
                     "FUNC:     [%p]\n",
                     stk->hash_func);
 
-    if ((error & INCORRECT_DATA_HASH) != 0)
+    if ((stk->status & INCORRECT_DATA_HASH) != 0)
         PrintLog("INCORRECT DATA HASH\n"
                     "EXPECTED:     %u\n"
                     "CURRENT:      %u\n",
                     stk->data_hash,
                     GetDataHash(stk));
 
-    if ((error & INCORRECT_STACK_HASH) != 0)
-        PrintLog("INCORRECT DATA HASH\n"
+    if ((stk->status & INCORRECT_STACK_HASH) != 0)
+        PrintLog("INCORRECT STACK HASH\n"
                     "EXPECTED:     %u\n"
                     "CURRENT:      %u\n",
                     stk->stack_hash,
                     GetStackHash(stk));
     #endif
 
-    PrintLog(">>>>>>>>STACK CONDITIONS END<<<<<<<\n");
+    PrintLog(">>>>>>>>STACK CONDITIONS END<<<<<<<\n\n");
 }
 
 //-----------------------------------------------------------------------------------------------------
 
-static inline bool IsStackValid(const Stack* stack, const char* func, const char* file, const int line)
+static inline bool IsStackValid(Stack* stack, const char* func, const char* file, const int line)
 {
-    int stack_error = StackOk(stack);
-    if (stack_error != OK)
+    StackOk(stack);
+    if (stack->status != OK)
     {
         const void* stk = (const void*) stack;
         LogDump(StackDump, stk, func, file, line);
-        PrintStackCondition(stack, stack_error);
         return false;
     }
 

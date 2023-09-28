@@ -8,7 +8,7 @@
 
 int main(const int argc, const char* argv[])
 {
-    if (argc == 1)
+        if (argc == 1)
         OpenLogFile(argv[0]);
     else
         OpenLogFile(argv[1]);
@@ -16,7 +16,7 @@ int main(const int argc, const char* argv[])
     Stack_t stk            = {};
     struct ErrorInfo error = {};
 
-    error.code = (ERRORS) StackCtor(&stk, 3);
+    error.code = (ERRORS) StackCtor(&stk);
     EXIT_IF_ERROR(&error);
 
     STACK_DUMP(&stk);
@@ -46,6 +46,29 @@ int main(const int argc, const char* argv[])
 
     error.code = (ERRORS) StackPop(&stk, &a);
     EXIT_IF_ERROR(&error);
+    error.code = (ERRORS) StackPop(&stk, &a);
+    EXIT_IF_ERROR(&error);
+    error.code = (ERRORS) StackPop(&stk, &a);
+    EXIT_IF_ERROR(&error);
+    error.code = (ERRORS) StackPop(&stk, &a);
+    EXIT_IF_ERROR(&error);
+    error.code = (ERRORS) StackPop(&stk, &a);
+    EXIT_IF_ERROR(&error);
+    error.code = (ERRORS) StackPop(&stk, &a);
+    EXIT_IF_ERROR(&error);
+    error.code = (ERRORS) StackPop(&stk, &a);
+    EXIT_IF_ERROR(&error);
+    error.code = (ERRORS) StackPop(&stk, &a);
+    EXIT_IF_ERROR(&error);
+    error.code = (ERRORS) StackPop(&stk, &a);
+    EXIT_IF_ERROR(&error);
+    error.code = (ERRORS) StackPop(&stk, &a);
+    EXIT_IF_ERROR(&error);
+    error.code = (ERRORS) StackPop(&stk, &a);
+    EXIT_IF_ERROR(&error);
+    error.code = (ERRORS) StackPop(&stk, &a);
+    EXIT_IF_ERROR(&error);
+
 
     STACK_DUMP(&stk);
 }
