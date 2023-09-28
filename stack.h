@@ -54,6 +54,8 @@
 #endif
 #define STACK_DUMP(stk)     LogDump(StackDump, stk, __func__, __FILE__, __LINE__)
 
+static const size_t MIN_CAPACITY = 16;
+
 /// @brief Stack structure
 struct Stack
 {
@@ -122,7 +124,7 @@ enum StackCondition
  * @param[in] capacity stack capacity
  * @return int error code
  *************************************************************/
-int StackCtor(Stack_t* stk, size_t capacity);
+int StackCtor(Stack_t* stk, size_t capacity = MIN_CAPACITY);
 
 /************************************************************//**
  * @brief Destroys stack

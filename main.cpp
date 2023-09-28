@@ -16,30 +16,30 @@ int main(const int argc, const char* argv[])
     Stack_t stk            = {};
     struct ErrorInfo error = {};
 
-    error.code = (ERRORS) StackCtor(&stk, 6);
+    error.code = (ERRORS) StackCtor(&stk, 3);
     EXIT_IF_ERROR(&error);
 
-    StackPush(&stk, 7);
-    StackPush(&stk, 7);
-    StackPush(&stk, 7);
-    StackPush(&stk, 7);
-    StackPush(&stk, 7);
-    StackPush(&stk, 7);
-    StackPush(&stk, 7);
-    StackPush(&stk, 7);
+    STACK_DUMP(&stk);
+
+    error.code = (ERRORS) StackPush(&stk, 7);
+    EXIT_IF_ERROR(&error);
+    error.code = (ERRORS) StackPush(&stk, 7);
+    EXIT_IF_ERROR(&error);
+    error.code = (ERRORS) StackPush(&stk, 7);
+    EXIT_IF_ERROR(&error);
+    error.code = (ERRORS) StackPush(&stk, 7);
+    EXIT_IF_ERROR(&error);
+    error.code = (ERRORS) StackPush(&stk, 7);
+    EXIT_IF_ERROR(&error);
+    error.code = (ERRORS) StackPush(&stk, 7);
+    EXIT_IF_ERROR(&error);
+    error.code = (ERRORS) StackPush(&stk, 7);
+    EXIT_IF_ERROR(&error);
+    error.code = (ERRORS) StackPush(&stk, 7);
+    EXIT_IF_ERROR(&error);
 
     elem_t a = 0;
-
-    error.code = (ERRORS) StackPop(&stk, &a);
-    EXIT_IF_ERROR(&error);
-    error.code = (ERRORS) StackPop(&stk, &a);
-    EXIT_IF_ERROR(&error);
-    error.code = (ERRORS) StackPop(&stk, &a);
-    EXIT_IF_ERROR(&error);
-    error.code = (ERRORS) StackPop(&stk, &a);
-    EXIT_IF_ERROR(&error);
-    error.code = (ERRORS) StackPop(&stk, &a);
-    EXIT_IF_ERROR(&error);
+    
     error.code = (ERRORS) StackPop(&stk, &a);
     EXIT_IF_ERROR(&error);
 

@@ -44,7 +44,6 @@ static void PoisonData(elem_t* left_border, elem_t* right_border);
 // =============CONSTS============
 static const canary_t canary_val = 0xD07ADEAD;
 static const elem_t POISON = NAN;
-static const size_t MIN_CAPACITY = 16;
 // ===============================
 
 int StackCtor(Stack_t* stk, size_t capacity)
@@ -75,6 +74,8 @@ int StackCtor(Stack_t* stk, size_t capacity)
     stk->data     = first_elem;
     stk->size     = 0;
     stk->capacity = capacity;
+
+    PoisonData(stk->data, (elem_t*)((char*)stk->data + stk->capacity * sizeof(elem_t)));
 
     ON_HASH
     (
@@ -188,6 +189,9 @@ static int StackRealloc(Stack_t* stk, size_t new_capacity)
 
     stk->data     = first_elem;
     stk->capacity = new_capacity;
+
+    PoisonData((elem_t*)((char*)stk->data + stk->size * sizeof(elem_t)),
+               (elem_t*)((char*)stk->data + stk->capacity * sizeof(elem_t)));
 
     ReInitAllHashes(stk);
 
