@@ -9,8 +9,6 @@
 * \brief Contains log functions
 */
 
-extern FILE* __LOG_STREAM__;
-
 static const size_t MAX_FILE_NAME_LEN = 100;
 
 /************************************************************//**
@@ -25,15 +23,6 @@ void OpenLogFile(const char* FILE_NAME);
  ************************************************************/
 void CloseLogFile();
 
-/************************************************************//**
- * @brief Prints elements(data) from stack
- *
- * @param[in] fp output stream
- * @param[in] stk stack pointer
- * @return int error code
- ************************************************************/
-int PrintStackData(FILE* fp, const Stack_t* stk);
-
 int LogDump(dump_f dump_func, const void* stk, const char* func, const char* file, const int line);
 
 int PrintLog (const char *format, ...);
@@ -42,17 +31,23 @@ int PrintLog (const char *format, ...);
 #undef LOG_START
 
 #endif
-#define LOG_START()         PrintLog("--------------------------------------------------\n"  \
-                                     "RUNNING FUNCTION %s FROM FILE \"%s\"(%d)\n",           \
-                                     __func__, __FILE__, __LINE__)
+#define LOG_START()             do                                                                      \
+                                {                                                                       \
+                                    PrintLog("--------------------------------------------------\n"     \
+                                             "RUNNING FUNCTION %s FROM FILE \"%s\"(%d)\n",              \
+                                             __func__, __FILE__, __LINE__);                             \
+                                } while(0)
 
 #ifdef LOG_END
 #undef LOG_END
 
 #endif
-#define LOG_END()           PrintLog("END TIME: %s\n"                                        \
-                                     "--------------------------------------------------\n", \
-                                     __TIME__)
+#define LOG_END()           do                                                                      \
+                            {                                                                       \
+                                PrintLog("END TIME: %s\n"                                           \
+                                        "--------------------------------------------------\n",     \
+                                        __TIME__);                                                  \
+                            } while(0)
 
 #ifdef LOG_SEPARATOR
 #undef LOG_SEPARATOR
@@ -64,21 +59,12 @@ int PrintLog (const char *format, ...);
 #undef LOG_START_MOD
 
 #endif
-#define LOG_START_MOD(func, file, line)     PrintLog(                                                       \
+#define LOG_START_MOD(func, file, line)     do                                                              \
+                                            {                                                               \
+                                                    PrintLog(                                               \
                                                     "--------------------LOG CALLED--------------------\n"  \
                                                     "RUNNING FUNCTION %s FROM FILE \"%s\"(%d)\n",           \
-                                                    func, file, line)
-
-#ifdef EXIT_IF_ERROR
-#undef EXIT_IF_ERROR
-
-#endif
-#define EXIT_IF_ERROR(error)                if (error->code != ERRORS::NONE)                        \
-                                            {                                                       \
-                                                return LogDump(PrintError, error, __func__,         \
-                                                                  __FILE__, __LINE__);              \
-                                            }
-
-
+                                                    func, file, line);                                      \
+                                            } while (0)
 
 #endif

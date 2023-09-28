@@ -7,6 +7,19 @@
 
 #include "types.h"
 
+#ifdef EXIT_IF_ERROR
+#undef EXIT_IF_ERROR
+
+#endif
+#define EXIT_IF_ERROR(error)                do                                                          \
+                                            {                                                           \
+                                                if ((error)->code != ERRORS::NONE)                      \
+                                                {                                                       \
+                                                    return LogDump(PrintError, error, __func__,         \
+                                                                    __FILE__, __LINE__);                \
+                                                }                                                       \
+                                            } while(0)
+
 /// @brief list of errors
 enum class ERRORS
 {

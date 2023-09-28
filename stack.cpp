@@ -6,7 +6,6 @@
 #include "hash.h"
 
 // ============= STATIC FUNCS ===============
-
 static inline bool EmptyStackCheck(Stack_t* stk);
 
 static void InitCanary(canary_t* prefix_canary, canary_t* postfix_canary);
@@ -24,12 +23,21 @@ static inline void ReInitAllHashes(Stack_t* stk);
 
 static int StackRealloc(Stack_t* stk, size_t new_capacity);
 
-static inline bool IsStackInvalid(const Stack* stack);
+static inline bool IsStackValid(const Stack* stack, const char* func, const char* file, const int line);
 
 static void PrintStackCondition(const Stack_t* stk, int error);
+static int PrintStackData(FILE* fp, const Stack_t* stk);
 //============================================
 
-static int Global_stack_error = 0;
+#ifdef CHECK_STACK
+#undef CHECK_STACK
+
+#endif
+#define CHECK_STACK(stk)    do                                                          \
+                            {                                                           \
+                                if (!IsStackValid(stk, __func__, __FILE__, __LINE__))   \
+                                    return (int) ERRORS::INVALID_STACK;                 \
+                            } while(0)
 
 static const elem_t POISON = NAN;
 
@@ -72,8 +80,7 @@ int StackCtor(Stack_t* stk, size_t capacity)
 
     ReInitAllHashes(stk);
 
-    if (IsStackInvalid(stk))
-        return (int) ERRORS::INVALID_STACK;
+    CHECK_STACK(stk);
 
     return (int) ERRORS::NONE;
 }
@@ -84,8 +91,7 @@ int StackDtor(Stack_t* stk)
 {
     assert(stk);
 
-    if (IsStackInvalid(stk))
-        return (int) ERRORS::INVALID_STACK;
+    CHECK_STACK(stk);
 
     OFF_CANARY(elem_t* data = stk->data);
 
@@ -120,8 +126,7 @@ int StackPush(Stack_t* stk, elem_t value)
     assert(stk);
     assert(stk->data);
 
-    if (IsStackInvalid(stk))
-        return (int) ERRORS::INVALID_STACK;
+    CHECK_STACK(stk);
 
     if (stk->capacity == stk->size)
     {
@@ -133,8 +138,7 @@ int StackPush(Stack_t* stk, elem_t value)
 
     ReInitAllHashes(stk);
 
-    if (IsStackInvalid(stk))
-        return (int) ERRORS::INVALID_STACK;
+    CHECK_STACK(stk);
 
     return (int) ERRORS::NONE;
 }
@@ -145,8 +149,7 @@ static int StackRealloc(Stack_t* stk, size_t new_capacity)
 {
     assert(stk);
 
-    if (IsStackInvalid(stk))
-        return (int) ERRORS::INVALID_STACK;
+    CHECK_STACK(stk);
 
     if (new_capacity == 0)
         new_capacity = MIN_CAPACITY;
@@ -185,8 +188,7 @@ static int StackRealloc(Stack_t* stk, size_t new_capacity)
 
     ReInitAllHashes(stk);
 
-    if (IsStackInvalid(stk))
-        return (int) ERRORS::INVALID_STACK;
+    CHECK_STACK(stk);
 
     return (int) ERRORS::NONE;
 }
@@ -201,8 +203,7 @@ int StackPop(Stack_t* stk, elem_t* ret_value)
     if (EmptyStackCheck(stk))
         return (int) ERRORS::EMPTY_STACK;
 
-    if (IsStackInvalid(stk))
-        return (int) ERRORS::INVALID_STACK;
+    CHECK_STACK(stk);
 
     *(ret_value) = (stk->data)[--(stk->size)];
     (stk->data)[(stk->size)] = POISON;
@@ -218,8 +219,7 @@ int StackPop(Stack_t* stk, elem_t* ret_value)
 
     ReInitAllHashes(stk);
 
-    if (IsStackInvalid(stk))
-        return (int) ERRORS::INVALID_STACK;
+    CHECK_STACK(stk);
 
     return (int) ERRORS::NONE;
 }
@@ -556,15 +556,34 @@ static void PrintStackCondition(const Stack_t* stk, int error)
 
 //-----------------------------------------------------------------------------------------------------
 
-static inline bool IsStackInvalid(const Stack* stack)
+static inline bool IsStackValid(const Stack* stack, const char* func, const char* file, const int line)
 {
     int stack_error = StackOk(stack);
     if (stack_error != OK)
     {
         const void* stk = (const void*) stack;
-        STACK_DUMP(stk);
-        return true;
+        LogDump(StackDump, stk, func, file, line);
+        return false;
     }
 
-    return false;
+    return true;
+}
+
+//-----------------------------------------------------------------------------------------------------
+
+static int PrintStackData(FILE* fp, const Stack_t* stk)
+{
+    for (size_t i = 0; i < stk->size; i++)
+    {
+        fprintf(fp, "*[%zu] > " PRINT_ELEM_T "\n", i, stk->data[i]);
+    }
+
+    fprintf(fp, "clear elements\n");
+
+    for (size_t i = stk->size; i < stk->capacity; i++)
+    {
+        fprintf(fp, "*[%zu] > " PRINT_ELEM_T "\n", i, stk->data[i]);
+    }
+
+    return (int) ERRORS::NONE;
 }

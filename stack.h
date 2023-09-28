@@ -54,17 +54,6 @@
 #endif
 #define STACK_DUMP(stk)     LogDump(StackDump, stk, __func__, __FILE__, __LINE__)
 
-#ifdef CHECK_STACK
-#define CHECK_STACK
-
-#endif
-#define CHECK_STACK(stk, stack_error)           stack_error = StackOk(stk);                         \
-                                                if (stack_error != OK)                              \
-                                                {                                                   \
-                                                    STACK_DUMP(stk);                                \
-                                                    return (int) ERRORS::INVALID_STACK;             \
-                                                }
-
 static const canary_t canary_val = 0xDEADDEAD;  /// canary value
 
 /// @brief Stack structure

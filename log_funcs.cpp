@@ -5,10 +5,9 @@
 #include <strings.h>
 
 #include "log_funcs.h"
-#include "errors.h"
 #include "stack.h"
 
-FILE* __LOG_STREAM__ = stderr;
+static FILE* __LOG_STREAM__ = stderr;
 
 static const char* EXTENSION = ".log";
 
@@ -51,25 +50,6 @@ void CloseLogFile()
                             "============================ PROGRAM END ============================\n"
                             "*********************************************************************\n");
     fclose(__LOG_STREAM__);
-}
-
-//-----------------------------------------------------------------------------------------------------
-
-int PrintStackData(FILE* fp, const Stack_t* stk)
-{
-    for (size_t i = 0; i < stk->size; i++)
-    {
-        fprintf(fp, "*[%zu] > " PRINT_ELEM_T "\n", i, stk->data[i]);
-    }
-
-    fprintf(fp, "clear elements\n");
-
-    for (size_t i = stk->size; i < stk->capacity; i++)
-    {
-        fprintf(fp, "*[%zu] > " PRINT_ELEM_T "\n", i, stk->data[i]);
-    }
-
-    return (int) ERRORS::NONE;
 }
 
 //-----------------------------------------------------------------------------------------------------

@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <assert.h>
 
-#include "types.h"
 #include "hash.h"
 
 hash_t MurmurHash (const void* obj, size_t size)
