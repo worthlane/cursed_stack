@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['log_5ffuncs_2eh_0',['log_funcs.h',['../log__funcs_8h.html',1,'']]]
+  ['murmurhash_0',['MurmurHash',['../hash_8h.html#a63343a91a7011b66e2b1bae71b124588',1,'hash.cpp']]]
 ];

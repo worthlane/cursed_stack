@@ -16,7 +16,7 @@ typedef unsigned int hash_t;
 typedef hash_t (*hash_f) (const void* obj, size_t size);
 /// canary type
 typedef long long unsigned int canary_t;
-
+/// dump function
 typedef int (*dump_f)(FILE*, const void*, const char*, const char*, const int);
 
 #define PRINT_ELEM_T "%lf"

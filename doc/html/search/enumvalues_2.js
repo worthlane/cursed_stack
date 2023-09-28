@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['empty_5fstack_0',['EMPTY_STACK',['../errors_8h.html#a622ccac4bed4b5ffcfd1acea83629286a5648d855e04da33b832fc2df1e486ec1',1,'errors.h']]]
+  ['empty_5fstack_0',['EMPTY_STACK',['../stack_8h.html#a90e3f8514dbbfbf73a66f0a85f075bdba056762ace6c5a12f12ad918ca1bdf19d',1,'stack.h']]]
 ];

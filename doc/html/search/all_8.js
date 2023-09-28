@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['murmurhash_0',['MurmurHash',['../hash_8h.html#a63343a91a7011b66e2b1bae71b124588',1,'hash.cpp']]]
+  ['none_0',['NONE',['../errors_8h.html#a622ccac4bed4b5ffcfd1acea83629286ab50339a10e1de285ac99d4c3990b8693',1,'errors.h']]]
 ];

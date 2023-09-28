@@ -23,8 +23,25 @@ void OpenLogFile(const char* FILE_NAME);
  ************************************************************/
 void CloseLogFile();
 
-int LogDump(dump_f dump_func, const void* stk, const char* func, const char* file, const int line);
+/************************************************************//**
+ * @brief Dumping information in logs
+ *
+ * @param[in] dump_func dumping function
+ * @param[in] obj dumping object
+ * @param[in] func function
+ * @param[in] file file
+ * @param[in] line line
+ * @return int 0
+ ************************************************************/
+int LogDump(dump_f dump_func, const void* obj, const char* func, const char* file, const int line);
 
+/************************************************************//**
+ * @brief Prints text in log (printf analogue)
+ *
+ * @param[in] format text format (like in printf)
+ * @param[in] ... extra arguments
+ * @return int amount of written symbols
+ *************************************************************/
 int PrintLog (const char *format, ...);
 
 #ifdef LOG_START

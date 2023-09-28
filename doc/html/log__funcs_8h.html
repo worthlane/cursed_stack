@@ -71,8 +71,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#define-members">Macros</a> &#124;
-<a href="#func-members">Functions</a> &#124;
-<a href="#var-members">Variables</a>  </div>
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle"><div class="title">log_funcs.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
@@ -86,23 +85,15 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:aaf3a42324e3a3a4e3ca3a7a974f21167"><td class="memItemLeft" align="right" valign="top"><a id="aaf3a42324e3a3a4e3ca3a7a974f21167" name="aaf3a42324e3a3a4e3ca3a7a974f21167"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>LOG_PRINT</b>(...)&#160;&#160;&#160;fprintf(__LOG_STREAM__, __VA_ARGS__)</td></tr>
-<tr class="separator:aaf3a42324e3a3a4e3ca3a7a974f21167"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a05a6ea702f273af626f2a71531cb15e1"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="log__funcs_8h.html#a05a6ea702f273af626f2a71531cb15e1">LOG_START</a>()</td></tr>
 <tr class="separator:a05a6ea702f273af626f2a71531cb15e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9708b0f891482fabcdd7eb9075d64a7a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="log__funcs_8h.html#a9708b0f891482fabcdd7eb9075d64a7a">LOG_END</a>()</td></tr>
 <tr class="separator:a9708b0f891482fabcdd7eb9075d64a7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad8065130fab9d54940bd1e3b045f9072"><td class="memItemLeft" align="right" valign="top"><a id="ad8065130fab9d54940bd1e3b045f9072" name="ad8065130fab9d54940bd1e3b045f9072"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>STACK_DUMP</b>(stk)&#160;&#160;&#160;StackDump(__LOG_STREAM__, stk, __func__, __FILE__, __LINE__)</td></tr>
-<tr class="separator:ad8065130fab9d54940bd1e3b045f9072"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4cc458d151692ca82c79ea18a6e95af2"><td class="memItemLeft" align="right" valign="top"><a id="a4cc458d151692ca82c79ea18a6e95af2" name="a4cc458d151692ca82c79ea18a6e95af2"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>LOG_SEPARATOR</b>()&#160;&#160;&#160;PrintSeparator(__LOG_STREAM__)</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>LOG_SEPARATOR</b>()&#160;&#160;&#160;PrintLog(&quot;\n........................................\n\n&quot;);</td></tr>
 <tr class="separator:a4cc458d151692ca82c79ea18a6e95af2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9e43f7d01ec94742284041deff0f3556"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="log__funcs_8h.html#a9e43f7d01ec94742284041deff0f3556">LOG_START_MOD</a>(func,  file,  line)</td></tr>
 <tr class="separator:a9e43f7d01ec94742284041deff0f3556"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6b6d4d2a561c359dbc671016f8180228"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="log__funcs_8h.html#a6b6d4d2a561c359dbc671016f8180228">EXIT_IF_ERROR</a>(error)</td></tr>
-<tr class="separator:a6b6d4d2a561c359dbc671016f8180228"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
@@ -112,46 +103,16 @@ Functions</h2></td></tr>
 <tr class="memitem:abc72fe68abd024cb263115e0afd3160a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="log__funcs_8h.html#abc72fe68abd024cb263115e0afd3160a">CloseLogFile</a> ()</td></tr>
 <tr class="memdesc:abc72fe68abd024cb263115e0afd3160a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Closes log file.  <br /></td></tr>
 <tr class="separator:abc72fe68abd024cb263115e0afd3160a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad0b41d2bc0f8c96dbbb9aadba3f3c328"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="log__funcs_8h.html#ad0b41d2bc0f8c96dbbb9aadba3f3c328">PrintSeparator</a> (FILE *fp)</td></tr>
-<tr class="memdesc:ad0b41d2bc0f8c96dbbb9aadba3f3c328"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints separator in output stream.  <br /></td></tr>
-<tr class="separator:ad0b41d2bc0f8c96dbbb9aadba3f3c328"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3f73f320a322ea150f0a4a334832dc59"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="log__funcs_8h.html#a3f73f320a322ea150f0a4a334832dc59">PrintStackData</a> (FILE *fp, const <a class="el" href="types_8h.html#ad97ac19c6b853e671de0fe08345ff88b">Stack_t</a> *stk)</td></tr>
-<tr class="memdesc:a3f73f320a322ea150f0a4a334832dc59"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints elements(data) from stack.  <br /></td></tr>
-<tr class="separator:a3f73f320a322ea150f0a4a334832dc59"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
-Variables</h2></td></tr>
-<tr class="memitem:a8925751661b05136aecb83f4779af581"><td class="memItemLeft" align="right" valign="top"><a id="a8925751661b05136aecb83f4779af581" name="a8925751661b05136aecb83f4779af581"></a>
-FILE *&#160;</td><td class="memItemRight" valign="bottom"><b>__LOG_STREAM__</b></td></tr>
-<tr class="separator:a8925751661b05136aecb83f4779af581"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02a0e10774ab9db6a61d830da488a1ad"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="log__funcs_8h.html#a02a0e10774ab9db6a61d830da488a1ad">LogDump</a> (<a class="el" href="types_8h.html#a907de129a67a4152cdf08894cc946e55">dump_f</a> dump_func, const void *obj, const char *func, const char *file, const int line)</td></tr>
+<tr class="memdesc:a02a0e10774ab9db6a61d830da488a1ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dumping information in logs.  <br /></td></tr>
+<tr class="separator:a02a0e10774ab9db6a61d830da488a1ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40250a0a9b61c625390b41fd979805dc"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="log__funcs_8h.html#a40250a0a9b61c625390b41fd979805dc">PrintLog</a> (const char *format,...)</td></tr>
+<tr class="memdesc:a40250a0a9b61c625390b41fd979805dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints text in log (printf analogue)  <br /></td></tr>
+<tr class="separator:a40250a0a9b61c625390b41fd979805dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Contains log functions. </p>
 </div><h2 class="groupheader">Macro Definition Documentation</h2>
-<a id="a6b6d4d2a561c359dbc671016f8180228" name="a6b6d4d2a561c359dbc671016f8180228"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6b6d4d2a561c359dbc671016f8180228">&#9670;&#160;</a></span>EXIT_IF_ERROR</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define EXIT_IF_ERROR</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">error</td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">                                            <span class="keywordflow">if</span> (error-&gt;code != <a class="code hl_enumvalue" href="errors_8h.html#a622ccac4bed4b5ffcfd1acea83629286ab50339a10e1de285ac99d4c3990b8693">ERRORS::NONE</a>)                       \</div>
-<div class="line">                                            {                                                      \</div>
-<div class="line">                                                <span class="keywordflow">return</span> PrintError(__LOG_STREAM__, error, __func__, \</div>
-<div class="line">                                                                  __FILE__, __LINE__);             \</div>
-<div class="line">                                            }</div>
-<div class="ttc" id="aerrors_8h_html_a622ccac4bed4b5ffcfd1acea83629286ab50339a10e1de285ac99d4c3990b8693"><div class="ttname"><a href="errors_8h.html#a622ccac4bed4b5ffcfd1acea83629286ab50339a10e1de285ac99d4c3990b8693">ERRORS::NONE</a></div><div class="ttdeci">@ NONE</div><div class="ttdoc">not an error</div></div>
-</div><!-- fragment -->
-</div>
-</div>
 <a id="a9708b0f891482fabcdd7eb9075d64a7a" name="a9708b0f891482fabcdd7eb9075d64a7a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9708b0f891482fabcdd7eb9075d64a7a">&#9670;&#160;</a></span>LOG_END</h2>
 
@@ -166,10 +127,12 @@ FILE *&#160;</td><td class="memItemRight" valign="bottom"><b>__LOG_STREAM__</b><
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">                                    fprintf(__LOG_STREAM__,                                         \</div>
-<div class="line">                                    <span class="stringliteral">&quot;END TIME: %s\n&quot;</span>                                        \</div>
-<div class="line">                                    <span class="stringliteral">&quot;--------------------------------------------------\n&quot;</span>, \</div>
-<div class="line">                                    __TIME__)</div>
+<b>Value:</b><div class="fragment"><div class="line">                            <span class="keywordflow">do</span>                                                                      \</div>
+<div class="line">                            {                                                                       \</div>
+<div class="line">                                PrintLog(<span class="stringliteral">&quot;END TIME: %s\n&quot;</span>                                           \</div>
+<div class="line">                                        <span class="stringliteral">&quot;--------------------------------------------------\n&quot;</span>,     \</div>
+<div class="line">                                        __TIME__);                                                  \</div>
+<div class="line">                            } <span class="keywordflow">while</span>(0)</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -187,10 +150,12 @@ FILE *&#160;</td><td class="memItemRight" valign="bottom"><b>__LOG_STREAM__</b><
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">                                    fprintf(__LOG_STREAM__,                                         \</div>
-<div class="line">                                    <span class="stringliteral">&quot;--------------------------------------------------\n&quot;</span>  \</div>
-<div class="line">                                    <span class="stringliteral">&quot;RUNNING FUNCTION %s FROM FILE \&quot;%s\&quot;(%d)\n&quot;</span>,           \</div>
-<div class="line">                                    __func__, __FILE__, __LINE__)</div>
+<b>Value:</b><div class="fragment"><div class="line">                            <span class="keywordflow">do</span>                                                                      \</div>
+<div class="line">                            {                                                                       \</div>
+<div class="line">                                PrintLog(<span class="stringliteral">&quot;--------------------------------------------------\n&quot;</span>     \</div>
+<div class="line">                                         <span class="stringliteral">&quot;RUNNING FUNCTION %s FROM FILE \&quot;%s\&quot;(%d)\n&quot;</span>,              \</div>
+<div class="line">                                         __func__, __FILE__, __LINE__);                             \</div>
+<div class="line">                            } <span class="keywordflow">while</span>(0)</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -225,10 +190,13 @@ FILE *&#160;</td><td class="memItemRight" valign="bottom"><b>__LOG_STREAM__</b><
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">                                                    fprintf(__LOG_STREAM__,                                         \</div>
+<b>Value:</b><div class="fragment"><div class="line">                                            <span class="keywordflow">do</span>                                                              \</div>
+<div class="line">                                            {                                                               \</div>
+<div class="line">                                                    PrintLog(                                               \</div>
 <div class="line">                                                    <span class="stringliteral">&quot;--------------------LOG CALLED--------------------\n&quot;</span>  \</div>
 <div class="line">                                                    <span class="stringliteral">&quot;RUNNING FUNCTION %s FROM FILE \&quot;%s\&quot;(%d)\n&quot;</span>,           \</div>
-<div class="line">                                                    func, file, line)</div>
+<div class="line">                                                    func, file, line);                                      \</div>
+<div class="line">                                            } <span class="keywordflow">while</span> (0)</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -249,6 +217,65 @@ FILE *&#160;</td><td class="memItemRight" valign="bottom"><b>__LOG_STREAM__</b><
 </div><div class="memdoc">
 
 <p>Closes log file. </p>
+
+</div>
+</div>
+<a id="a02a0e10774ab9db6a61d830da488a1ad" name="a02a0e10774ab9db6a61d830da488a1ad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a02a0e10774ab9db6a61d830da488a1ad">&#9670;&#160;</a></span>LogDump()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int LogDump </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="types_8h.html#a907de129a67a4152cdf08894cc946e55">dump_f</a>&#160;</td>
+          <td class="paramname"><em>dump_func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const void *&#160;</td>
+          <td class="paramname"><em>obj</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>file</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>line</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Dumping information in logs. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">dump_func</td><td>dumping function </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">obj</td><td>dumping object </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">func</td><td>function </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">file</td><td>file </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">line</td><td>line </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int 0 </dd></dl>
 
 </div>
 </div>
@@ -278,49 +305,23 @@ FILE *&#160;</td><td class="memItemRight" valign="bottom"><b>__LOG_STREAM__</b><
 
 </div>
 </div>
-<a id="ad0b41d2bc0f8c96dbbb9aadba3f3c328" name="ad0b41d2bc0f8c96dbbb9aadba3f3c328"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad0b41d2bc0f8c96dbbb9aadba3f3c328">&#9670;&#160;</a></span>PrintSeparator()</h2>
+<a id="a40250a0a9b61c625390b41fd979805dc" name="a40250a0a9b61c625390b41fd979805dc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a40250a0a9b61c625390b41fd979805dc">&#9670;&#160;</a></span>PrintLog()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void PrintSeparator </td>
+          <td class="memname">int PrintLog </td>
           <td>(</td>
-          <td class="paramtype">FILE *&#160;</td>
-          <td class="paramname"><em>fp</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Prints separator in output stream. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">fp</td><td>output stream </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a3f73f320a322ea150f0a4a334832dc59" name="a3f73f320a322ea150f0a4a334832dc59"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3f73f320a322ea150f0a4a334832dc59">&#9670;&#160;</a></span>PrintStackData()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int PrintStackData </td>
-          <td>(</td>
-          <td class="paramtype">FILE *&#160;</td>
-          <td class="paramname"><em>fp</em>, </td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>format</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="types_8h.html#ad97ac19c6b853e671de0fe08345ff88b">Stack_t</a> *&#160;</td>
-          <td class="paramname"><em>stk</em>&#160;</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -330,15 +331,15 @@ FILE *&#160;</td><td class="memItemRight" valign="bottom"><b>__LOG_STREAM__</b><
       </table>
 </div><div class="memdoc">
 
-<p>Prints elements(data) from stack. </p>
+<p>Prints text in log (printf analogue) </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">fp</td><td>output stream </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">stk</td><td>stack pointer </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">format</td><td>text format (like in printf) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">...</td><td>extra arguments </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>int error code </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>int amount of written symbols </dd></dl>
 
 </div>
 </div>

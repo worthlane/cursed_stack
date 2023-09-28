@@ -71,6 +71,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
+<a href="#define-members">Macros</a> &#124;
 <a href="#enum-members">Enumerations</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle"><div class="title">errors.h File Reference</div></div>
@@ -80,7 +81,6 @@ $(function() {
 <p>Contains enumerated errors.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="types_8h_source.html">types.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="stack_8h_source.html">stack.h</a>&quot;</code><br />
 </div>
 <p><a href="errors_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -89,6 +89,11 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_error_info.html">ErrorInfo</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">struct with all error info  <a href="struct_error_info.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:a6b6d4d2a561c359dbc671016f8180228"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="errors_8h.html#a6b6d4d2a561c359dbc671016f8180228">EXIT_IF_ERROR</a>(error)</td></tr>
+<tr class="separator:a6b6d4d2a561c359dbc671016f8180228"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
@@ -100,41 +105,50 @@ Enumerations</h2></td></tr>
 , <br />
 &#160;&#160;<a class="el" href="errors_8h.html#a622ccac4bed4b5ffcfd1acea83629286a01c9e18b4dc7c48157b6d4eaa39ded58">PRINT_DATA</a>
 , <a class="el" href="errors_8h.html#a622ccac4bed4b5ffcfd1acea83629286afeb15aff4dd63902750c1fd19bb137e9">INVALID_STACK</a>
-, <a class="el" href="errors_8h.html#a622ccac4bed4b5ffcfd1acea83629286a5648d855e04da33b832fc2df1e486ec1">EMPTY_STACK</a>
 , <a class="el" href="errors_8h.html#a622ccac4bed4b5ffcfd1acea83629286a696b031073e74bf2cb98e5ef201d4aa3">UNKNOWN</a>
 <br />
  }</td></tr>
 <tr class="memdesc:a622ccac4bed4b5ffcfd1acea83629286"><td class="mdescLeft">&#160;</td><td class="mdescRight">list of errors  <a href="errors_8h.html#a622ccac4bed4b5ffcfd1acea83629286">More...</a><br /></td></tr>
 <tr class="separator:a622ccac4bed4b5ffcfd1acea83629286"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a90e3f8514dbbfbf73a66f0a85f075bdb"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="errors_8h.html#a90e3f8514dbbfbf73a66f0a85f075bdb">StackCondition</a> { <br />
-&#160;&#160;<a class="el" href="errors_8h.html#a90e3f8514dbbfbf73a66f0a85f075bdba2bc49ec37d6a5715dd23e85f1ff5bb59">OK</a> = 0
-, <a class="el" href="errors_8h.html#a90e3f8514dbbfbf73a66f0a85f075bdba9fde99ceaf9213e172ee2caed331372d">INVALID_CAPACITY</a> = 1 &lt;&lt; 1
-, <a class="el" href="errors_8h.html#a90e3f8514dbbfbf73a66f0a85f075bdba9e61b210b3c755ed78b07d90905443a5">INVALID_SIZE</a> = 1 &lt;&lt; 2
-, <a class="el" href="errors_8h.html#a90e3f8514dbbfbf73a66f0a85f075bdba1cf2f29eaea742a6926f1efd4b9c16e8">INVALID_DATA</a> = 1 &lt;&lt; 3
-, <br />
-&#160;&#160;<a class="el" href="errors_8h.html#a90e3f8514dbbfbf73a66f0a85f075bdba0deca480e93916f690cf554cb5e95036">DATA_CANARY_TRIGGER</a> = 1 &lt;&lt; 4
-, <a class="el" href="errors_8h.html#a90e3f8514dbbfbf73a66f0a85f075bdba5ae9b807c57b87d5a4695db6c09c5c9f">STACK_CANARY_TRIGGER</a> = 1 &lt;&lt; 5
-, <a class="el" href="errors_8h.html#a90e3f8514dbbfbf73a66f0a85f075bdba1e945589b270a65d42ce4866d882905e">INVALID_HASH_FUNC</a> = 1 &lt;&lt; 6
-, <a class="el" href="errors_8h.html#a90e3f8514dbbfbf73a66f0a85f075bdbaece27feeda977a473558ce2c54f5e253">INCORRECT_DATA_HASH</a> = 1 &lt;&lt; 7
-, <br />
-&#160;&#160;<a class="el" href="errors_8h.html#a90e3f8514dbbfbf73a66f0a85f075bdba300cb90cf479557ce0321cfc73b0bb48">INCORRECT_STACK_HASH</a> = 1 &lt;&lt; 8
-<br />
- }</td></tr>
-<tr class="memdesc:a90e3f8514dbbfbf73a66f0a85f075bdb"><td class="mdescLeft">&#160;</td><td class="mdescRight">list of stack conditions  <a href="errors_8h.html#a90e3f8514dbbfbf73a66f0a85f075bdb">More...</a><br /></td></tr>
-<tr class="separator:a90e3f8514dbbfbf73a66f0a85f075bdb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ab924beacefcab0e213c1857eda443144"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="errors_8h.html#ab924beacefcab0e213c1857eda443144">PrintError</a> (FILE *fp, struct <a class="el" href="struct_error_info.html">ErrorInfo</a> *error, const char *func, const char *file, const int line)</td></tr>
-<tr class="memdesc:ab924beacefcab0e213c1857eda443144"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints error from error list.  <br /></td></tr>
-<tr class="separator:ab924beacefcab0e213c1857eda443144"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a864307360a6e2cb85b0cd0b8c9ddc13b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="errors_8h.html#a864307360a6e2cb85b0cd0b8c9ddc13b">PrintStackCondition</a> (FILE *fp, int error, const <a class="el" href="types_8h.html#ad97ac19c6b853e671de0fe08345ff88b">Stack_t</a> *stk)</td></tr>
-<tr class="memdesc:a864307360a6e2cb85b0cd0b8c9ddc13b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints stack condition.  <br /></td></tr>
-<tr class="separator:a864307360a6e2cb85b0cd0b8c9ddc13b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a430b678ef1720e3697e3724beac05271"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="errors_8h.html#a430b678ef1720e3697e3724beac05271">PrintError</a> (FILE *fp, const void *error, const char *func, const char *file, const int line)</td></tr>
+<tr class="memdesc:a430b678ef1720e3697e3724beac05271"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints error from error list.  <br /></td></tr>
+<tr class="separator:a430b678ef1720e3697e3724beac05271"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Contains enumerated errors. </p>
-</div><h2 class="groupheader">Enumeration Type Documentation</h2>
+</div><h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="a6b6d4d2a561c359dbc671016f8180228" name="a6b6d4d2a561c359dbc671016f8180228"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b6d4d2a561c359dbc671016f8180228">&#9670;&#160;</a></span>EXIT_IF_ERROR</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define EXIT_IF_ERROR</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">error</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">                                            <span class="keywordflow">do</span>                                                          \</div>
+<div class="line">                                            {                                                           \</div>
+<div class="line">                                                if ((error)-&gt;code != <a class="code hl_enumvalue" href="errors_8h.html#a622ccac4bed4b5ffcfd1acea83629286ab50339a10e1de285ac99d4c3990b8693">ERRORS::NONE</a>)                      \</div>
+<div class="line">                                                {                                                       \</div>
+<div class="line">                                                    <span class="keywordflow">return</span> LogDump(<a class="code hl_function" href="errors_8h.html#a430b678ef1720e3697e3724beac05271">PrintError</a>, error, __func__,         \</div>
+<div class="line">                                                                    __FILE__, __LINE__);                \</div>
+<div class="line">                                                }                                                       \</div>
+<div class="line">                                            } <span class="keywordflow">while</span>(0)</div>
+<div class="ttc" id="aerrors_8h_html_a430b678ef1720e3697e3724beac05271"><div class="ttname"><a href="errors_8h.html#a430b678ef1720e3697e3724beac05271">PrintError</a></div><div class="ttdeci">int PrintError(FILE *fp, const void *error, const char *func, const char *file, const int line)</div><div class="ttdoc">Prints error from error list.</div><div class="ttdef"><b>Definition</b> errors.cpp:8</div></div>
+<div class="ttc" id="aerrors_8h_html_a622ccac4bed4b5ffcfd1acea83629286ab50339a10e1de285ac99d4c3990b8693"><div class="ttname"><a href="errors_8h.html#a622ccac4bed4b5ffcfd1acea83629286ab50339a10e1de285ac99d4c3990b8693">ERRORS::NONE</a></div><div class="ttdeci">@ NONE</div><div class="ttdoc">not an error</div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<h2 class="groupheader">Enumeration Type Documentation</h2>
 <a id="a622ccac4bed4b5ffcfd1acea83629286" name="a622ccac4bed4b5ffcfd1acea83629286"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a622ccac4bed4b5ffcfd1acea83629286">&#9670;&#160;</a></span>ERRORS</h2>
 
@@ -169,53 +183,15 @@ Functions</h2></td></tr>
 </td></tr>
 <tr><td class="fieldname"><a id="a622ccac4bed4b5ffcfd1acea83629286afeb15aff4dd63902750c1fd19bb137e9" name="a622ccac4bed4b5ffcfd1acea83629286afeb15aff4dd63902750c1fd19bb137e9"></a>INVALID_STACK&#160;</td><td class="fielddoc"><p>invalid stack error </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a622ccac4bed4b5ffcfd1acea83629286a5648d855e04da33b832fc2df1e486ec1" name="a622ccac4bed4b5ffcfd1acea83629286a5648d855e04da33b832fc2df1e486ec1"></a>EMPTY_STACK&#160;</td><td class="fielddoc"><p>popping element from empty stack </p>
-</td></tr>
 <tr><td class="fieldname"><a id="a622ccac4bed4b5ffcfd1acea83629286a696b031073e74bf2cb98e5ef201d4aa3" name="a622ccac4bed4b5ffcfd1acea83629286a696b031073e74bf2cb98e5ef201d4aa3"></a>UNKNOWN&#160;</td><td class="fielddoc"><p>unknown error </p>
 </td></tr>
 </table>
 
 </div>
 </div>
-<a id="a90e3f8514dbbfbf73a66f0a85f075bdb" name="a90e3f8514dbbfbf73a66f0a85f075bdb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a90e3f8514dbbfbf73a66f0a85f075bdb">&#9670;&#160;</a></span>StackCondition</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="errors_8h.html#a90e3f8514dbbfbf73a66f0a85f075bdb">StackCondition</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>list of stack conditions </p>
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a90e3f8514dbbfbf73a66f0a85f075bdba2bc49ec37d6a5715dd23e85f1ff5bb59" name="a90e3f8514dbbfbf73a66f0a85f075bdba2bc49ec37d6a5715dd23e85f1ff5bb59"></a>OK&#160;</td><td class="fielddoc"><p>everything is fine </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a90e3f8514dbbfbf73a66f0a85f075bdba9fde99ceaf9213e172ee2caed331372d" name="a90e3f8514dbbfbf73a66f0a85f075bdba9fde99ceaf9213e172ee2caed331372d"></a>INVALID_CAPACITY&#160;</td><td class="fielddoc"><p>stack has invalid capacity (&lt;= 0) </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a90e3f8514dbbfbf73a66f0a85f075bdba9e61b210b3c755ed78b07d90905443a5" name="a90e3f8514dbbfbf73a66f0a85f075bdba9e61b210b3c755ed78b07d90905443a5"></a>INVALID_SIZE&#160;</td><td class="fielddoc"><p>stack has invalid size (&gt; capacity or &lt; 0) </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a90e3f8514dbbfbf73a66f0a85f075bdba1cf2f29eaea742a6926f1efd4b9c16e8" name="a90e3f8514dbbfbf73a66f0a85f075bdba1cf2f29eaea742a6926f1efd4b9c16e8"></a>INVALID_DATA&#160;</td><td class="fielddoc"><p>stack contains invalid data </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a90e3f8514dbbfbf73a66f0a85f075bdba0deca480e93916f690cf554cb5e95036" name="a90e3f8514dbbfbf73a66f0a85f075bdba0deca480e93916f690cf554cb5e95036"></a>DATA_CANARY_TRIGGER&#160;</td><td class="fielddoc"><p>data canary triggered (canary protection mode) </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a90e3f8514dbbfbf73a66f0a85f075bdba5ae9b807c57b87d5a4695db6c09c5c9f" name="a90e3f8514dbbfbf73a66f0a85f075bdba5ae9b807c57b87d5a4695db6c09c5c9f"></a>STACK_CANARY_TRIGGER&#160;</td><td class="fielddoc"><p>stack canary triggered (canary protection mode) </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a90e3f8514dbbfbf73a66f0a85f075bdba1e945589b270a65d42ce4866d882905e" name="a90e3f8514dbbfbf73a66f0a85f075bdba1e945589b270a65d42ce4866d882905e"></a>INVALID_HASH_FUNC&#160;</td><td class="fielddoc"><p>invalid hash function (hash protect mode) </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a90e3f8514dbbfbf73a66f0a85f075bdbaece27feeda977a473558ce2c54f5e253" name="a90e3f8514dbbfbf73a66f0a85f075bdbaece27feeda977a473558ce2c54f5e253"></a>INCORRECT_DATA_HASH&#160;</td><td class="fielddoc"><p>not expected data hash (hash protect mode) </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a90e3f8514dbbfbf73a66f0a85f075bdba300cb90cf479557ce0321cfc73b0bb48" name="a90e3f8514dbbfbf73a66f0a85f075bdba300cb90cf479557ce0321cfc73b0bb48"></a>INCORRECT_STACK_HASH&#160;</td><td class="fielddoc"><p>not expected stack hash (hash protect mode) </p>
-</td></tr>
-</table>
-
-</div>
-</div>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="ab924beacefcab0e213c1857eda443144" name="ab924beacefcab0e213c1857eda443144"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab924beacefcab0e213c1857eda443144">&#9670;&#160;</a></span>PrintError()</h2>
+<a id="a430b678ef1720e3697e3724beac05271" name="a430b678ef1720e3697e3724beac05271"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a430b678ef1720e3697e3724beac05271">&#9670;&#160;</a></span>PrintError()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -229,7 +205,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">struct <a class="el" href="struct_error_info.html">ErrorInfo</a> *&#160;</td>
+          <td class="paramtype">const void *&#160;</td>
           <td class="paramname"><em>error</em>, </td>
         </tr>
         <tr>
@@ -270,50 +246,6 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>int error code </dd></dl>
-
-</div>
-</div>
-<a id="a864307360a6e2cb85b0cd0b8c9ddc13b" name="a864307360a6e2cb85b0cd0b8c9ddc13b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a864307360a6e2cb85b0cd0b8c9ddc13b">&#9670;&#160;</a></span>PrintStackCondition()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void PrintStackCondition </td>
-          <td>(</td>
-          <td class="paramtype">FILE *&#160;</td>
-          <td class="paramname"><em>fp</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>error</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="types_8h.html#ad97ac19c6b853e671de0fe08345ff88b">Stack_t</a> *&#160;</td>
-          <td class="paramname"><em>stk</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Prints stack condition. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">fp</td><td>output stream </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">error</td><td>error </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">stk</td><td>stack pointer </td></tr>
-  </table>
-  </dd>
-</dl>
 
 </div>
 </div>

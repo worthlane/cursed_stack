@@ -78,21 +78,23 @@ $(function() {
 
 <p>Contains all info about typed.  
 <a href="#details">More...</a></p>
-
+<div class="textblock"><code>#include &lt;math.h&gt;</code><br />
+<code>#include &lt;assert.h&gt;</code><br />
+</div>
 <p><a href="types_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
 Macros</h2></td></tr>
 <tr class="memitem:a5dd4a319c1f6ee2fb3fae627eb14590a"><td class="memItemLeft" align="right" valign="top"><a id="a5dd4a319c1f6ee2fb3fae627eb14590a" name="a5dd4a319c1f6ee2fb3fae627eb14590a"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>PRINT_ELEM_T</b>&#160;&#160;&#160;&quot;%lld&quot;</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>PRINT_ELEM_T</b>&#160;&#160;&#160;&quot;%lf&quot;</td></tr>
 <tr class="separator:a5dd4a319c1f6ee2fb3fae627eb14590a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:a90421bf48c920c2e623458ba1e134a2a"><td class="memItemLeft" align="right" valign="top"><a id="a90421bf48c920c2e623458ba1e134a2a" name="a90421bf48c920c2e623458ba1e134a2a"></a>
-typedef long long int&#160;</td><td class="memItemRight" valign="bottom"><b>elem_t</b></td></tr>
-<tr class="memdesc:a90421bf48c920c2e623458ba1e134a2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">stack element type <br /></td></tr>
-<tr class="separator:a90421bf48c920c2e623458ba1e134a2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a48ca3ff2cfe9aa2266d0fd50b0858a80"><td class="memItemLeft" align="right" valign="top"><a id="a48ca3ff2cfe9aa2266d0fd50b0858a80" name="a48ca3ff2cfe9aa2266d0fd50b0858a80"></a>
+typedef double&#160;</td><td class="memItemRight" valign="bottom"><b>elem_t</b></td></tr>
+<tr class="memdesc:a48ca3ff2cfe9aa2266d0fd50b0858a80"><td class="mdescLeft">&#160;</td><td class="mdescRight">stack element type <br /></td></tr>
+<tr class="separator:a48ca3ff2cfe9aa2266d0fd50b0858a80"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad97ac19c6b853e671de0fe08345ff88b"><td class="memItemLeft" align="right" valign="top"><a id="ad97ac19c6b853e671de0fe08345ff88b" name="ad97ac19c6b853e671de0fe08345ff88b"></a>
 typedef struct <a class="el" href="struct_stack.html">Stack</a>&#160;</td><td class="memItemRight" valign="bottom"><b>Stack_t</b></td></tr>
 <tr class="memdesc:ad97ac19c6b853e671de0fe08345ff88b"><td class="mdescLeft">&#160;</td><td class="mdescRight">stack type <br /></td></tr>
@@ -109,6 +111,10 @@ typedef <a class="el" href="types_8h.html#afb05a131363b0de134535fc5f7b01dc0">has
 typedef long long unsigned int&#160;</td><td class="memItemRight" valign="bottom"><b>canary_t</b></td></tr>
 <tr class="memdesc:afea1fbe48beaf2a0ce692779f6f91a3d"><td class="mdescLeft">&#160;</td><td class="mdescRight">canary type <br /></td></tr>
 <tr class="separator:afea1fbe48beaf2a0ce692779f6f91a3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a907de129a67a4152cdf08894cc946e55"><td class="memItemLeft" align="right" valign="top"><a id="a907de129a67a4152cdf08894cc946e55" name="a907de129a67a4152cdf08894cc946e55"></a>
+typedef int(*&#160;</td><td class="memItemRight" valign="bottom"><b>dump_f</b>) (FILE *, const void *, const char *, const char *, const int)</td></tr>
+<tr class="memdesc:a907de129a67a4152cdf08894cc946e55"><td class="mdescLeft">&#160;</td><td class="mdescRight">dump function <br /></td></tr>
+<tr class="separator:a907de129a67a4152cdf08894cc946e55"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Contains all info about typed. </p>

@@ -77,6 +77,7 @@ int StackCtor(Stack_t* stk, size_t capacity)
     stk->data     = first_elem;
     stk->size     = 0;
     stk->capacity = capacity;
+    stk->reserved = capacity;
 
     PoisonData(stk->data, (elem_t*)((char*)stk->data + stk->capacity * sizeof(elem_t)));
 
@@ -110,6 +111,7 @@ int StackDtor(Stack_t* stk)
     stk->data     = nullptr;
     stk->size     = 0;
     stk->capacity = 0;
+    stk->reserved = 0;
 
     ON_CANARY
     (
@@ -193,6 +195,9 @@ static int StackRealloc(Stack_t* stk, size_t new_capacity)
     stk->data     = first_elem;
     stk->capacity = new_capacity;
 
+    if (stk->reserved > stk->capacity)
+        stk->reserved = stk->capacity;
+
     PoisonData((elem_t*)((char*)stk->data + stk->size * sizeof(elem_t)),
                (elem_t*)((char*)stk->data + stk->capacity * sizeof(elem_t)));
 
@@ -216,8 +221,6 @@ int StackPop(Stack_t* stk, elem_t* ret_value)
         PrintStackCondition(stk, EMPTY_STACK);
         return (int) ERRORS::INVALID_STACK;
     }
-
-    CHECK_STACK(stk);
 
     *(ret_value) = (stk->data)[--(stk->size)];
     (stk->data)[(stk->size)] = POISON;
@@ -349,7 +352,7 @@ static hash_t GetDataHash(const Stack_t* stk)
     ON_HASH
     (
         elem_t* data = stk->data;
-        size_t data_size = stk->capacity * sizeof(elem_t);
+        size_t data_size = stk->reserved * sizeof(elem_t);
 
         ON_CANARY
         (
@@ -357,7 +360,7 @@ static hash_t GetDataHash(const Stack_t* stk)
             data_size = data_size + 2 * sizeof(canary_t)
         );
 
-        new_hash = stk->hash_func(data, data_size)
+        new_hash = stk->hash_func(data, data_size);
     );
 
     return new_hash;
