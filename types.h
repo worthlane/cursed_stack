@@ -3,6 +3,7 @@
 */
 
 #include <math.h>
+#include <assert.h>
 
 /// stack element type
 typedef double elem_t;

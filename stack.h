@@ -103,18 +103,20 @@ enum StackCondition
     INVALID_SIZE         = 1 << 3,
     /// stack contains invalid data
     INVALID_DATA         = 1 << 4,
+    /// access to poisoned element
+    POISON_ACCESS        = 1 << 5,
 
     /// data canary triggered (canary protection mode)
-    DATA_CANARY_TRIGGER  = 1 << 5,
+    DATA_CANARY_TRIGGER  = 1 << 6,
     /// stack canary triggered (canary protection mode)
-    STACK_CANARY_TRIGGER = 1 << 6,
+    STACK_CANARY_TRIGGER = 1 << 7,
 
     /// invalid hash function (hash protect mode)
-    INVALID_HASH_FUNC    = 1 << 7,
+    INVALID_HASH_FUNC    = 1 << 8,
     /// not expected data hash (hash protect mode)
-    INCORRECT_DATA_HASH  = 1 << 8,
+    INCORRECT_DATA_HASH  = 1 << 9,
     /// not expected stack hash (hash protect mode)
-    INCORRECT_STACK_HASH = 1 << 9
+    INCORRECT_STACK_HASH = 1 << 10
 };
 
 /************************************************************//**

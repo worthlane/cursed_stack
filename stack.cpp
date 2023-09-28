@@ -29,6 +29,9 @@ static void PrintStackCondition(const Stack_t* stk, int error);
 static int PrintStackData(FILE* fp, const Stack_t* stk);
 
 static void PoisonData(elem_t* left_border, elem_t* right_border);
+static bool PoisonVerify(Stack_t* stk);
+
+static bool Equal(const elem_t* a, const elem_t* b);
 //============================================
 
 #ifdef CHECK_STACK
@@ -255,6 +258,7 @@ int StackOk(const Stack_t* stk)
     if (stk->capacity <= 0)                                         error |= INVALID_CAPACITY;
     if (stk->size > stk->capacity)                                  error |= INVALID_SIZE;
     if (stk->data == nullptr && stk->capacity != 0)                 error |= INVALID_DATA;
+    if (!PoisonVerify((Stack_t*) stk))                              error |= POISON_ACCESS;
 
     ON_HASH
     (
@@ -517,6 +521,9 @@ static void PrintStackCondition(const Stack_t* stk, int error)
     if ((error & EMPTY_STACK) != 0)
         PrintLog("CAN NOT POP ELEMENT FROM EMPTY STACK\n");
 
+    if ((error & POISON_ACCESS) != 0)
+        PrintLog("CAN NOT ACCESS TO POISONED ELEMENT\n");
+
     #if CANARY_PROTECT
     canary_t* prefix_canary  = GetPrefixDataCanary(stk);
     canary_t* postfix_canary = GetPostfixDataCanary(stk);
@@ -605,4 +612,37 @@ static void PoisonData(elem_t* left_border, elem_t* right_border)
     {
         *iterator = POISON;
     }
+}
+
+//-----------------------------------------------------------------------------------------------------
+
+static bool PoisonVerify(Stack_t* stk)
+{
+    elem_t* left_border  = (elem_t*)((char*)stk->data + stk->size * sizeof(elem_t));
+    elem_t* right_border = (elem_t*)((char*)stk->data + stk->capacity * sizeof(elem_t));
+
+    for (elem_t* iterator = left_border; iterator < right_border - 1; iterator++)
+    {
+        if (!Equal(&POISON, iterator))
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+//-----------------------------------------------------------------------------------------------------
+
+static bool Equal(const elem_t* a, const elem_t* b)
+{
+    assert(a);
+    assert(b);
+
+    if (isnan(*a) && isnan(*b))
+        return true;
+
+    const elem_t EPSILON = 1e-5;
+
+    return fabs(*a - *b) < EPSILON;
 }
