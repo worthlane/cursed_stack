@@ -70,7 +70,7 @@ int PrintLog (const char *format, ...)
   int done;
 
   va_start (arg, format);
-  done = vfprintf (__LOG_STREAM__, format, arg);
+  done = vfprintf(__LOG_STREAM__, format, arg);
   va_end (arg);
 
   return done;

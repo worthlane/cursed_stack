@@ -48,11 +48,6 @@ int PrintError(FILE* fp, const void* err, const char* func, const char* file, co
             LOG_END();
             return (int) error->code;
 
-        case (ERRORS::EMPTY_STACK):
-            fprintf(fp, "CAN'T POP ELEMENT FROM EMPTY STACK\n");
-            LOG_END();
-            return (int) error->code;
-
         case (ERRORS::UNKNOWN):
         default:
             fprintf(fp, "UNKNOWN ERROR\n");

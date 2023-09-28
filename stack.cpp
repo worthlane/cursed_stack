@@ -27,6 +27,8 @@ static inline bool IsStackValid(const Stack* stack, const char* func, const char
 
 static void PrintStackCondition(const Stack_t* stk, int error);
 static int PrintStackData(FILE* fp, const Stack_t* stk);
+
+static void PoisonData(elem_t* left_border, elem_t* right_border);
 //============================================
 
 #ifdef CHECK_STACK
@@ -39,9 +41,11 @@ static int PrintStackData(FILE* fp, const Stack_t* stk);
                                     return (int) ERRORS::INVALID_STACK;                 \
                             } while(0)
 
+// =============CONSTS============
+static const canary_t canary_val = 0xD07ADEAD;
 static const elem_t POISON = NAN;
-
 static const size_t MIN_CAPACITY = 16;
+// ===============================
 
 int StackCtor(Stack_t* stk, size_t capacity)
 {
@@ -151,16 +155,15 @@ static int StackRealloc(Stack_t* stk, size_t new_capacity)
 
     CHECK_STACK(stk);
 
-    if (new_capacity == 0)
+    if (new_capacity < MIN_CAPACITY)
         new_capacity = MIN_CAPACITY;
 
     elem_t* data       = stk->data;
     elem_t* first_elem = data;
-    size_t new_size    = new_capacity * sizeof(elem_t);
+    size_t new_size    = CountDataSize(new_capacity);
 
     ON_CANARY
     (
-        new_size = new_size + 2 * sizeof(canary_t);
         data = (elem_t*)((char*) data - sizeof(canary_t))
     );
 
@@ -201,7 +204,11 @@ int StackPop(Stack_t* stk, elem_t* ret_value)
     assert(stk->data);
 
     if (EmptyStackCheck(stk))
-        return (int) ERRORS::EMPTY_STACK;
+    {
+        STACK_DUMP(stk);
+        PrintStackCondition(stk, EMPTY_STACK);
+        return (int) ERRORS::INVALID_STACK;
+    }
 
     CHECK_STACK(stk);
 
@@ -422,15 +429,6 @@ int StackDump(FILE* fp, const void* stack, const char* func, const char* file, c
                     "POSTFIX DATA CANARY > %llX\n", *prefix_canary, *postfix_canary)
     );
 
-    int error = 0;
-    error = StackOk(stk);
-    if (error != 0)
-    {
-        PrintStackCondition(stk, error);
-        LOG_END();
-        return (int) ERRORS::INVALID_STACK;
-    }
-
     LOG_END();
 
     return (int) ERRORS::NONE;
@@ -512,6 +510,9 @@ static void PrintStackCondition(const Stack_t* stk, int error)
                     "DATA:     [%p]\n",
                     stk->data);
 
+    if ((error & EMPTY_STACK) != 0)
+        PrintLog("CAN NOT POP ELEMENT FROM EMPTY STACK\n");
+
     #if CANARY_PROTECT
     canary_t* prefix_canary  = GetPrefixDataCanary(stk);
     canary_t* postfix_canary = GetPostfixDataCanary(stk);
@@ -563,6 +564,7 @@ static inline bool IsStackValid(const Stack* stack, const char* func, const char
     {
         const void* stk = (const void*) stack;
         LogDump(StackDump, stk, func, file, line);
+        PrintStackCondition(stack, stack_error);
         return false;
     }
 
@@ -586,4 +588,17 @@ static int PrintStackData(FILE* fp, const Stack_t* stk)
     }
 
     return (int) ERRORS::NONE;
+}
+
+//-----------------------------------------------------------------------------------------------------
+
+static void PoisonData(elem_t* left_border, elem_t* right_border)
+{
+    assert(left_border);
+    assert(right_border);
+
+    for (elem_t* iterator = left_border; iterator < right_border; iterator++)
+    {
+        *iterator = POISON;
+    }
 }

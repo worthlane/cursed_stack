@@ -31,12 +31,12 @@ int PrintLog (const char *format, ...);
 #undef LOG_START
 
 #endif
-#define LOG_START()             do                                                                      \
-                                {                                                                       \
-                                    PrintLog("--------------------------------------------------\n"     \
-                                             "RUNNING FUNCTION %s FROM FILE \"%s\"(%d)\n",              \
-                                             __func__, __FILE__, __LINE__);                             \
-                                } while(0)
+#define LOG_START()         do                                                                      \
+                            {                                                                       \
+                                PrintLog("--------------------------------------------------\n"     \
+                                         "RUNNING FUNCTION %s FROM FILE \"%s\"(%d)\n",              \
+                                         __func__, __FILE__, __LINE__);                             \
+                            } while(0)
 
 #ifdef LOG_END
 #undef LOG_END

@@ -54,8 +54,6 @@
 #endif
 #define STACK_DUMP(stk)     LogDump(StackDump, stk, __func__, __FILE__, __LINE__)
 
-static const canary_t canary_val = 0xDEADDEAD;  /// canary value
-
 /// @brief Stack structure
 struct Stack
 {
@@ -87,6 +85,34 @@ struct Stack
         /// stack postfix canary
         canary_t stack_postfix;
     )
+};
+
+/// @brief list of stack conditions
+enum StackCondition
+{
+    /// everything is fine
+    OK                   = 0,
+
+    /// stack has invalid capacity (<= 0)
+    INVALID_CAPACITY     = 1 << 1,
+    /// stack size is 0
+    EMPTY_STACK          = 1 << 2,
+    /// stack has invalid size (> capacity)
+    INVALID_SIZE         = 1 << 3,
+    /// stack contains invalid data
+    INVALID_DATA         = 1 << 4,
+
+    /// data canary triggered (canary protection mode)
+    DATA_CANARY_TRIGGER  = 1 << 5,
+    /// stack canary triggered (canary protection mode)
+    STACK_CANARY_TRIGGER = 1 << 6,
+
+    /// invalid hash function (hash protect mode)
+    INVALID_HASH_FUNC    = 1 << 7,
+    /// not expected data hash (hash protect mode)
+    INCORRECT_DATA_HASH  = 1 << 8,
+    /// not expected stack hash (hash protect mode)
+    INCORRECT_STACK_HASH = 1 << 9
 };
 
 /************************************************************//**
