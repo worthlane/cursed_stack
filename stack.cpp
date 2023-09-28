@@ -13,7 +13,7 @@ static bool VerifyCanary(const canary_t* prefix_canary, const canary_t* postfix_
 static canary_t* GetPostfixDataCanary(const Stack_t* stk);
 static canary_t* GetPrefixDataCanary(const Stack_t* stk);
 
-static size_t CountDataSize(size_t capacity);
+static size_t CountDataSize(const size_t capacity);
 
 static hash_t GetDataHash(const Stack_t* stk);
 static hash_t GetStackHash(const Stack_t* stk);
@@ -24,7 +24,6 @@ static inline void ReInitAllHashes(Stack_t* stk);
 static int StackRealloc(Stack_t* stk, size_t new_capacity);
 
 static inline bool IsStackValid(const Stack* stack, const char* func, const char* file, const int line);
-
 static void PrintStackCondition(const Stack_t* stk, int error);
 static int PrintStackData(FILE* fp, const Stack_t* stk);
 
@@ -196,7 +195,7 @@ static int StackRealloc(Stack_t* stk, size_t new_capacity)
     stk->capacity = new_capacity;
 
     if (stk->reserved > stk->capacity)
-        stk->reserved = stk->capacity;
+        stk->reserved = stk->capacity;      // still needed for bug
 
     PoisonData((elem_t*)((char*)stk->data + stk->size * sizeof(elem_t)),
                (elem_t*)((char*)stk->data + stk->capacity * sizeof(elem_t)));
@@ -261,7 +260,9 @@ int StackOk(const Stack_t* stk)
     if (stk->capacity <= 0)                                         error |= INVALID_CAPACITY;
     if (stk->size > stk->capacity)                                  error |= INVALID_SIZE;
     if (stk->data == nullptr && stk->capacity != 0)                 error |= INVALID_DATA;
+#pragma GCC diagnostic ignored "-Wcast-qual"
     if (!PoisonVerify((Stack_t*) stk))                              error |= POISON_ACCESS;
+#pragma GCC diagnostic warning "-Wcast-qual"
 
     ON_HASH
     (
@@ -458,7 +459,7 @@ static inline void ReInitAllHashes(Stack_t* stk)
 
 //-----------------------------------------------------------------------------------------------------
 
-static size_t CountDataSize(size_t capacity)
+static size_t CountDataSize(const size_t capacity)
 {
     size_t size = capacity * sizeof(elem_t);
 

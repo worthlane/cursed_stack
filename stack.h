@@ -4,6 +4,7 @@
 #include <stdio.h>
 
 #include "errors.h"
+#include "log_funcs.h"
 #include "types.h"
 
 /*! \file
@@ -72,7 +73,7 @@ struct Stack
     /// stack capacity
     size_t capacity;
     /// reserved capacity (that did not allocate somewhere)
-    size_t reserved;                                            // actually needed for hacking -_-
+    size_t reserved;                               // actually needed for not primitive bug -_-
 
     ON_HASH
     (
