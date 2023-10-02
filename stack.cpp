@@ -45,7 +45,7 @@ static bool Equal(const elem_t* a, const elem_t* b);
 
 // =============CONSTS============
 static const canary_t canary_val = 0xD07ADEAD;
-static const elem_t POISON       = -228;
+static const elem_t POISON       = NAN;
 // ===============================
 
 int StackCtor(Stack_t* stk, size_t capacity)
@@ -220,17 +220,15 @@ int StackPop(Stack_t* stk, elem_t* ret_value)
     {
         stk->status |= EMPTY_STACK;
         STACK_DUMP(stk);
-        PrintStackCondition(stk);
         return (int) ERRORS::INVALID_STACK;
     }
 
     *(ret_value) = (stk->data)[--(stk->size)];
     (stk->data)[(stk->size)] = POISON;
 
-    ReInitAllHashes(stk);
-
     if (stk->size <= stk->capacity >> 2)
     {
+        ReInitAllHashes(stk);
         int realloc_error  = StackRealloc(stk, stk->capacity >> 1);
         if (realloc_error != (int) ERRORS::NONE)
             return realloc_error;

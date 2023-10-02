@@ -13,9 +13,9 @@ static const char* EXTENSION = ".log";
 
 void OpenLogFile(const char* FILE_NAME)
 {
-    char* file_name = strdup(FILE_NAME);
+    char* file_name = strndup(FILE_NAME, MAX_FILE_NAME_LEN);
 
-    __LOG_STREAM__ = fopen(strncat(file_name, EXTENSION, MAX_FILE_NAME_LEN), "a");
+    __LOG_STREAM__ = fopen(strncat(file_name, EXTENSION, MAX_FILE_NAME_LEN + sizeof(EXTENSION)), "a");
 
     if (__LOG_STREAM__ == nullptr)
         __LOG_STREAM__ = stderr;

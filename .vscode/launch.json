@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "lldb",
+      "request": "launch",
+      "args": [],
+      "cwd": "/Users/amigo/Documents/GitHub/cursed_stack",
+      "program": "/Users/amigo/Documents/GitHub/cursed_stack/build/Debug/outDebug"
+    }
+  ]
+}

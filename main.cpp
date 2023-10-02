@@ -19,8 +19,6 @@ int main(const int argc, const char* argv[])
     error.code = (ERRORS) StackCtor(&stk);
     EXIT_IF_ERROR(&error);
 
-    STACK_DUMP(&stk);
-
     error.code = (ERRORS) StackPush(&stk, 7);
     EXIT_IF_ERROR(&error);
     error.code = (ERRORS) StackPush(&stk, 7);
@@ -37,25 +35,9 @@ int main(const int argc, const char* argv[])
     EXIT_IF_ERROR(&error);
     error.code = (ERRORS) StackPush(&stk, 7);
     EXIT_IF_ERROR(&error);
-
-    stk.data[4] = 228;
-
-    STACK_DUMP(&stk);
 
     elem_t a = 0;
 
-    error.code = (ERRORS) StackPop(&stk, &a);
-    EXIT_IF_ERROR(&error);
-    error.code = (ERRORS) StackPop(&stk, &a);
-    EXIT_IF_ERROR(&error);
-    error.code = (ERRORS) StackPop(&stk, &a);
-    EXIT_IF_ERROR(&error);
-    error.code = (ERRORS) StackPop(&stk, &a);
-    EXIT_IF_ERROR(&error);
-    error.code = (ERRORS) StackPop(&stk, &a);
-    EXIT_IF_ERROR(&error);
-    error.code = (ERRORS) StackPop(&stk, &a);
-    EXIT_IF_ERROR(&error);
     error.code = (ERRORS) StackPop(&stk, &a);
     EXIT_IF_ERROR(&error);
     error.code = (ERRORS) StackPop(&stk, &a);
