@@ -6,7 +6,7 @@
 #include <assert.h>
 
 /// stack element type
-typedef double elem_t;
+typedef long long elem_t;
 /// stack type
 typedef struct Stack Stack_t;
 
@@ -19,4 +19,5 @@ typedef long long unsigned int canary_t;
 /// dump function
 typedef int (*dump_f)(FILE*, const void*, const char*, const char*, const int);
 
-#define PRINT_ELEM_T "%lf"
+#define PRINT_ELEM_T "%lld"
+

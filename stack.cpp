@@ -30,7 +30,7 @@ static int PrintStackData(FILE* fp, const Stack_t* stk);
 static void PoisonData(elem_t* left_border, elem_t* right_border);
 static bool PoisonVerify(Stack_t* stk);
 
-static bool Equal(const elem_t* a, const elem_t* b);
+static bool Equal(const elem_t a, const elem_t b);
 //============================================
 
 #ifdef CHECK_STACK
@@ -45,7 +45,7 @@ static bool Equal(const elem_t* a, const elem_t* b);
 
 // =============CONSTS============
 static const canary_t canary_val = 0xD07ADEAD;
-static const elem_t POISON       = NAN;
+static const elem_t POISON       = -123456789;
 // ===============================
 
 int StackCtor(Stack_t* stk, size_t capacity)
@@ -76,7 +76,6 @@ int StackCtor(Stack_t* stk, size_t capacity)
     stk->data     = first_elem;
     stk->size     = 0;
     stk->capacity = capacity;
-    stk->reserved = capacity;
     stk->status   = OK;
 
     PoisonData(stk->data, (elem_t*)((char*)stk->data + stk->capacity * sizeof(elem_t)));
@@ -111,7 +110,6 @@ int StackDtor(Stack_t* stk)
     stk->data     = nullptr;
     stk->size     = 0;
     stk->capacity = 0;
-    stk->reserved = 0;
     stk->status   = OK;
 
     ON_CANARY
@@ -196,9 +194,6 @@ static int StackRealloc(Stack_t* stk, size_t new_capacity)
     stk->data     = first_elem;
     stk->capacity = new_capacity;
 
-    if (stk->reserved > stk->capacity)
-        stk->reserved = stk->capacity;      // still needed for bug
-
     PoisonData((elem_t*)((char*)stk->data + stk->size * sizeof(elem_t)),
                (elem_t*)((char*)stk->data + stk->capacity * sizeof(elem_t)));
 
@@ -222,6 +217,8 @@ int StackPop(Stack_t* stk, elem_t* ret_value)
         STACK_DUMP(stk);
         return (int) ERRORS::INVALID_STACK;
     }
+
+    CHECK_STACK(stk);
 
     *(ret_value) = (stk->data)[--(stk->size)];
     (stk->data)[(stk->size)] = POISON;
@@ -356,7 +353,7 @@ static hash_t GetDataHash(const Stack_t* stk)
     ON_HASH
     (
         elem_t* data = stk->data;
-        size_t data_size = stk->reserved * sizeof(elem_t);
+        size_t data_size = stk->capacity * sizeof(elem_t);
 
         ON_CANARY
         (
@@ -609,7 +606,7 @@ static int PrintStackData(FILE* fp, const Stack_t* stk)
     for (size_t i = stk->size; i < stk->capacity; i++)
     {
         fprintf(fp, "*[%zu] > " PRINT_ELEM_T, i, stk->data[i]);
-        if (Equal(&(stk->data[i]), &POISON))
+        if (Equal((stk->data[i]), POISON))
             fprintf(fp, " (POISONED)");
         fprintf(fp, "\n");
     }
@@ -639,7 +636,7 @@ static bool PoisonVerify(Stack_t* stk)
 
     for (elem_t* iterator = left_border; iterator < right_border - 1; iterator++)
     {
-        if (!Equal(&POISON, iterator))
+        if (!Equal(POISON, *iterator))
         {
             return false;
         }
@@ -650,15 +647,13 @@ static bool PoisonVerify(Stack_t* stk)
 
 //-----------------------------------------------------------------------------------------------------
 
-static bool Equal(const elem_t* a, const elem_t* b)
+bool Equal(const elem_t a, const elem_t b)
 {
-    assert(a);
-    assert(b);
 
-    if (isnan(*a) && isnan(*b))
+    if (isnan(a) && isnan(b))
         return true;
 
-    const elem_t EPSILON = 1e-5;
+    // const elem_t EPSILON = 1e-5;
 
-    return fabs(*a - *b) < EPSILON;
+    return a == b;
 }
